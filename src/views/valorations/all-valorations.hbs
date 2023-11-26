@@ -1,0 +1,112 @@
+<div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+        <form action="/valorations" method="GET">
+            <div class="input-group"  style="margin-top: 20px;">
+                <input type="text" class="form-control" placeholder="Ingresar Apellido, o Nombre, o Cama" name="search" value="{{#if search}}{{search}}{{/if}}">
+                <div class="input-group-append">
+                    <button class="btn btn-dark" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    {{#if noResults}}
+        <div class="card mx-auto">
+            <div class="card-body">
+                <p class="lead">{{#if search}}No hay coincidencias para "{{search}}".{{else}}No hay Valoraciones de Pacientes aún.{{/if}}</p>
+            </div>
+        </div>
+    {{else}} 
+        <h3 class="text-center w-100 text-white">Valoraciones Recientes</h3>
+        {{#each valorations}}
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="card mb-5 w-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">
+                            Paciente: 
+                            {{#if paciente.apellido}}
+                                {{paciente.apellido}}
+                            {{/if}}
+
+                            {{#if paciente.apellido}} {{#if paciente.nombre}} {{else}} - {{/if}} {{else}} - {{/if}}
+                            
+                            {{#if paciente.nombre}}
+                                {{paciente.nombre}}
+                            {{/if}}
+                            
+                            {{#if isLatest}} 
+                                <a href="/valorations/edit/{{_id}}"> <i class="fas fa-edit"></i> </a>
+                            {{/if}}
+                        </h4>
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Servicio: {{ingreso.cama.servicio.nombre}}</span> Cama Nro.: {{ingreso.cama.numeroCama}}
+                        </p>
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Fecha de Recolección de Datos: {{date}}</span> Hora: {{time}}
+                        </p>
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Valoración hecha por: {{apellidoCargador}}, {{nombreCargador}}</span> Matrícula: {{matriculaCargador}}
+                        </p>
+                        <!--<p class="text-center">
+                            <span style="margin-right: 25px;">Estado de Internación: {{ingreso.estadoInternacion}}</span>
+                        </p> -->
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Estado de Internación: 
+                                <span class="{{#ifCond ingreso.estadoInternacion '===' 'No finalizada'}}bg-yellow{{else}}bg-green{{/ifCond}}">
+                                    {{ingreso.estadoInternacion}}
+                                </span>
+                            </span>
+                        </p>
+                        <!-- Agrega verificación para mostrar la fecha y hora de Alta Paciente -->
+                        <p class="text-center">
+                            {{#if ingreso.fechaYHoraAltaPaciente}}
+                                <span style="margin-right: 25px;">Fecha de Alta: {{formatDate ingreso.fechaYHoraAltaPaciente}}</span>
+                                Hora de Alta: {{formatTime ingreso.fechaYHoraAltaPaciente}}
+                                <p class="text-center">
+                                    <span style="margin-right: 25px;">Responsable de Alta: {{ingreso.apellidoResponsableAltaPaciente}}, {{ingreso.nombreResponsableAltaPaciente}}</span>
+                                </p>
+                            {{else}}
+                                <span style="margin-right: 25px;">Fecha de Alta: -</span> Hora de Alta: -
+                                <p class="text-center">
+                                    <span style="margin-right: 25px;">Responsable de Alta: -</span>
+                                </p>
+                            {{/if}}
+                        </p>
+
+                        <form action="/valorations/show/{{_id}}" method="GET" class="mb-2">
+                            <button class="btn btn-info btn-block btn-sm" type="submit">
+                                Ver Valoración
+                            </button>
+                        </form>
+                        <!--{{#if ingreso.fechaYHoraAltaPaciente}}
+                        {{else}}-->
+                            <!-- Agrega el botón solo si la internación no está finalizada -->
+                        {{#if isLatest}}   
+                            <form action="/valorations/finalizarInternacion/{{_id}}" method="POST" class="mb-2" onsubmit="return confirm('¿Estás seguro de que deseas dar de alta al siguiente paciente?\nApellido: {{paciente.apellido}}\nNombre: {{paciente.nombre}}\nCama: {{ingreso.cama.numeroCama}}\nServicio: {{ingreso.cama.servicio.nombre}}')">
+                                <button class="btn btn-success btn-block btn-sm" type="submit">
+                                    Dar de Alta
+                                </button>
+                            </form>
+                        {{/if}}
+                        <!--{{/if}}-->
+                        <!-- <form action="/valorations/delete/{{_id}}?_method=DELETE" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger btn-block btn-sm" type="submit">
+                                Eliminar
+                            </button>
+                        </form> -->
+                    </div>
+                </div>
+            </div>
+        {{else}}
+        <div class="card mx-auto">
+            <div class="card-body">
+                <p class="lead">No hay Valoraciones de Pacientes aún.</p>
+                <a href="/valorations/add" class="btn btn-success btn-block">Crear una Valoración</a>
+            </div>
+        </div>
+        {{/each}}
+    {{/if}}
+</div>

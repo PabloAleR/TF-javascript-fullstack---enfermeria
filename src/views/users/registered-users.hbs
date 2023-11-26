@@ -1,0 +1,43 @@
+<h3 class="text-center w-100 text-white"> Informe de Usuarios Registrados</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover small" style="background-color: white;">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center vertical-center">Nombre de Usuario</th>
+                <th scope="col" class="text-center vertical-center">Email</th>
+                <th scope="col" class="text-center vertical-center">Rol de Usuario</th>
+                <th scope="col" class="text-center vertical-center">Fecha y Hora de Creación</th>
+                <th scope="col" class="text-center vertical-center">Nombre</th>
+                <th scope="col" class="text-center vertical-center">Apellido</th>
+                <th scope="col" class="text-center vertical-center">DNI</th>
+                <th scope="col" class="text-center vertical-center">Fecha de Nacimiento</th>
+                <th scope="col" class="text-center vertical-center">Sexo</th>
+                <th scope="col" class="text-center vertical-center">Domicilio</th>
+                <th scope="col" class="text-center vertical-center">Número de Teléfono Fijo</th>
+                <th scope="col" class="text-center vertical-center">Número de Celular</th>
+                <th scope="col" class="text-center vertical-center">Profesión</th>
+                <th scope="col" class="text-center vertical-center">Matrícula Profesional</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td class="text-center vertical-center">{{this.nombreUsuario}}</td>
+                <td class="text-center vertical-center">{{this.email}}</td>
+                <td class="text-center vertical-center">{{this.rolUsuario}}</td>
+                <td class="text-center vertical-center">{{this.fechaYHoraCreacion}}</td>
+                <td class="text-center vertical-center">{{this.profesional.nombre}}</td>
+                <td class="text-center vertical-center">{{this.profesional.apellido}}</td>
+                <td class="text-center vertical-center">{{this.profesional.dni}}</td>
+                <td class="text-center vertical-center">{{this.profesional.fechaNacimiento}}</td>
+                <td class="text-center vertical-center">{{this.profesional.sexo}}</td>
+                <td class="text-center vertical-center">{{this.profesional.domicilio}}</td>
+                <td class="text-center vertical-center">{{this.profesional.numeroTelefonoFijo}}</td>
+                <td class="text-center vertical-center">{{this.profesional.numeroCelular}}</td>
+                <td class="text-center vertical-center">{{this.profesional.profesion}}</td>
+                <td class="text-center vertical-center">{{this.profesional.matriculaProfesional}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,39 @@
+<h3 class="text-center w-100 text-white"> Informe de Pacientes Internados</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover small" style="background-color: white;">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center vertical-center">Apellido del Paciente</th>
+                <th scope="col" class="text-center vertical-center">Nombre del Paciente</th>
+                <th scope="col" class="text-center vertical-center">Fecha y Hora de Ingreso</th>
+                <th scope="col" class="text-center vertical-center">Servicio</th>
+                <th scope="col" class="text-center vertical-center">Número de Cama</th>
+                <th scope="col" class="text-center vertical-center">Tipo de Ingreso</th>
+                <th scope="col" class="text-center vertical-center">Motivo de Ingreso</th>
+                <th scope="col" class="text-center vertical-center">DNI del Paciente</th>
+                <th scope="col" class="text-center vertical-center">Sexo del Paciente</th>
+                <th scope="col" class="text-center vertical-center">Cobertura de Salud del Paciente</th>
+                <th scope="col" class="text-center vertical-center">Nacionalidad del Paciente</th>
+                <th scope="col" class="text-center vertical-center">Procedencia del Paciente</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each valorations}}
+            <tr>
+                <td class="text-center vertical-center">{{this.paciente.apellido}}</td>
+                <td class="text-center vertical-center">{{this.paciente.nombre}}</td>
+                <td class="text-center vertical-center">{{this.fechaYHoraRecoleccionDatos}}</td>
+                <td class="text-center vertical-center">{{this.ingreso.cama.servicio.nombre}}</td>
+                <td class="text-center vertical-center">{{this.ingreso.cama.numeroCama}}</td>
+                <td class="text-center vertical-center">{{this.ingreso.tipoIngreso}}</td>
+                <td class="text-center vertical-center">{{this.ingreso.motivoIngreso}}</td>
+                <td class="text-center vertical-center">{{this.paciente.dni}}</td>
+                <td class="text-center vertical-center">{{this.paciente.sexo}}</td>
+                <td class="text-center vertical-center">{{this.paciente.coberturaSalud}}</td>
+                <td class="text-center vertical-center">{{this.paciente.nacionalidad}}</td>
+                <td class="text-center vertical-center">{{this.paciente.procedencia}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

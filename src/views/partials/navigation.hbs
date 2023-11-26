@@ -1,0 +1,97 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Hospital Paterson</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">Acerca de</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {{#if userCurrent}}
+                    {{#if (eq userCurrent.rolUsuario 'Administrador')}}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Usuarios
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/users">Ver Usuarios</a>
+                                <a class="dropdown-item" href="/users/signup">Agregar Usuario</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Valoraciones
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/valorations">Ver Valoraciones</a>
+                                <a class="dropdown-item" href="/valorations/add">Agregar Valoración</a>
+                                <a class="dropdown-item" href="/unfinished-patient-valorations">Ver sólo Valoraciones con Int. no finalizada</a>
+                                <a class="dropdown-item" href="/my-valorations/{{userCurrent.profesional.matriculaProfesional}}">Ver mis Valoraciones</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Informes
+                            </a>
+                            <!-- Agrega las opciones del menú desplegable para Informes aquí -->
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/hospitalized-patients">Pacientes Internados</a>
+                                <a class="dropdown-item" href="/beds-available">Camas Disponibles</a>
+                                <a class="dropdown-item" href="/registered-users">Usuarios Registrados</a>
+                            </div>
+                        </li>
+                    {{/if}}
+                    {{#if (eq userCurrent.rolUsuario 'Cargador')}}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Valoraciones
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/valorations">Ver Valoraciones</a>
+                                <a class="dropdown-item" href="/valorations/add">Agregar Valoración</a>
+                                <a class="dropdown-item" href="/unfinished-patient-valorations">Ver sólo Valoraciones con Int. no finalizada</a>
+                                <a class="dropdown-item" href="/my-valorations/{{userCurrent.profesional.matriculaProfesional}}">Ver mis Valoraciones</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Informes
+                            </a>
+                            <!-- Agrega las opciones del menú desplegable para Informes aquí -->
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/hospitalized-patients">Pacientes Internados</a>
+                                <a class="dropdown-item" href="/beds-available">Camas Disponibles</a>
+                            </div>
+                        </li>
+                    {{/if}}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Usuario: {{userCurrent.nombreUsuario}}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/users/show/{{userCurrent._id}}">Mis datos</a>
+                            <!--<a class="dropdown-item" href="#">Cambiar contraseña</a> -->
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/users/logout">Cerrar Sesión</a>
+                        </div>
+                    </li>
+                {{else}}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/users/signin">Loguin</a>
+                    </li>
+                {{/if}}
+            </ul>      
+        </div>
+    </div>
+</nav>

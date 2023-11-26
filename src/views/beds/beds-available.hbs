@@ -1,0 +1,21 @@
+<h3 class="text-center w-100 text-white"> Informe de Camas Disponibles</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover small" style="background-color: white;">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center vertical-center">Número de Cama</th>
+                <th scope="col" class="text-center vertical-center">Estado</th>
+                <th scope="col" class="text-center vertical-center">Servicio</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each beds}}
+            <tr>
+                <td class="text-center vertical-center">{{this.numeroCama}}</td>
+                <td class="text-center vertical-center">{{this.estado}}</td>
+                <td class="text-center vertical-center">{{this.servicio.nombre}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

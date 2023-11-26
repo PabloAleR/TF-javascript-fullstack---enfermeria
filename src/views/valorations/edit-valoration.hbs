@@ -1,0 +1,1304 @@
+<div class="col-md-10 mx-auto mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-center">Modificar Valoración</h3>
+        </div>
+        <div class="card-body">
+            <form action="/valorations/edit-valoration/{{valoration._id}}?_method=PUT" method="POST">
+                <input type="hidden" name="_method" value="PUT">
+                <div>
+                    <p class="text-center">
+                        <span style="margin-right: 10px;">Fecha de Recolección de Datos: {{valoration.date}}</span>
+                        Hora: {{valoration.time}}
+                    </p>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header">I- Datos personales del Paciente</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos del Paciente -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Apellido:</label>
+                            <input type="text" name="apellido" class="form-control" placeholder="Apellido"
+                                value="{{valoration.paciente.apellido}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Nombre:</label>
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre"
+                                value="{{valoration.paciente.nombre}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">DNI:</label>
+                            <input type="number" name="dni" class="form-control w-auto" placeholder="DNI" value="{{valoration.paciente.dni}}"
+                                step="1">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Fecha de Nacimiento:</label>
+                            {{#if formattedFechaNacimiento}}
+                                <input type="date" name="fechaNacimiento" class="form-control border-1 bg-transparent"
+                                    placeholder="-" value="{{formattedFechaNacimiento}}" max="{{maxDate}}" style="width: min-content;">
+                            {{else}}
+                                <input type="date" name="fechaNacimiento" class="form-control border-1 bg-transparent"
+                                    placeholder="-" max="{{maxDate}}" style="width: min-content;">
+                            {{/if}}
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Sexo: <span class="text-danger font-weight-bold">*</span></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sexo" id="masculino"
+                                    value="Masculino" {{#ifCond valoration.paciente.sexo '===' 'Masculino' }}checked{{/ifCond}} disabled>
+                                <label class="form-check-label" for="masculino">
+                                    Masculino
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sexo" id="femenino" value="Femenino"
+                                    {{#ifCond valoration.paciente.sexo '===' 'Femenino' }}checked{{/ifCond}} disabled>
+                                <label class="form-check-label" for="femenino">
+                                    Femenino
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Estado Civil:</label>
+                            <input type="text" name="estadoCivil" class="form-control" placeholder="Estado Civil"
+                                value="{{valoration.paciente.estadoCivil}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Domicilio Actual:</label>
+                            <input type="text" name="domicilioActual" class="form-control"
+                                placeholder="Domicilio Actual" value="{{valoration.paciente.domicilioActual}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Cobertura de Salud:</label>
+                            <input type="text" name="coberturaSalud" class="form-control"
+                                placeholder="Cobertura de Salud" value="{{valoration.paciente.coberturaSalud}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Nacionalidad:</label>
+                            <input type="text" name="nacionalidad" class="form-control" placeholder="Nacionalidad"
+                                value="{{valoration.paciente.nacionalidad}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Procedencia:</label>
+                            <input type="text" name="procedencia" class="form-control" placeholder="Procedencia"
+                                value="{{valoration.paciente.procedencia}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- II- Datos de Ingreso a Internación -->
+                <div class="card mb-3">
+                    <div class="card-header"> II- Datos de Ingreso a Internación</div>
+                    <div class="card-body">
+                        <!-- Campos de Internación -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Motivo de Ingreso: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <input type="text" name="motivoIngreso" class="form-control" placeholder="Motivo de Ingreso"
+                                value="{{valoration.ingreso.motivoIngreso}}" disabled>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Servicio: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <!-- <select id="servicio" name="servicio" class="form-control" disabled
+                                style="width: min-content;">
+                                <option>{{valoration.ingreso.servicio}}</option>
+                            </select> -->
+                            <select id="servicio" name="servicio" class="form-control border-1 bg-gray" style="width: min-content;" disabled>
+                                <option value="">Selecciona un servicio</option> <!-- Opción vacía -->
+                                {{#each services}}
+                                    <option value="{{this._id}}" {{#ifCondStr this._id '===' ../valoration.ingreso.cama.servicio._id}}selected{{/ifCondStr}}>
+                                        {{this.nombre}}
+                                    </option>
+                                {{/each}}
+                            </select>                            
+                        </div>
+                        <!-- Campo oculto para el nombre del servicio -->
+                        <input type="hidden" id="servicioNombre" name="servicioNombre">
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Número de Cama: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <!-- <select id="bedSelect" name="numeroCama" class="form-control" disabled
+                                style="width: min-content;">
+                                <option>{{valoration.ingreso.numeroCama}}</option>
+                            </select> -->
+                            <select id="bedSelect" name="numeroCama" class="form-control border-1 bg-gray" style="width: min-content;" disabled>
+                                {{#each beds}}
+                                    <option value="{{this._id}}" {{#ifCondStr this._id '===' ../valoration.ingreso.cama._id}}selected{{/ifCondStr}}>
+                                        {{this.numeroCama}}
+                                    </option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <span style="margin-right: 10px;">Fecha y hora de Ingreso: {{dateIngreso}}</span> Hora: {{timeIngreso}}                        
+                        </div>   
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Tipo de Ingreso: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoIngreso" id="programado"
+                                    value="Programado" {{#ifCond valoration.ingreso.tipoIngreso '===' 'Programado' }}checked{{/ifCond}} disabled>
+                                <label class="form-check-label" for="programado">
+                                    Programado
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoIngreso" id="urgencia"
+                                    value="Urgencia" {{#ifCond valoration.ingreso.tipoIngreso '===' 'Urgencia' }}checked{{/ifCond}} disabled>
+                                <label class="form-check-label" for="urgencia">
+                                    Urgencia
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- III- Diagnóstico médico o Hipótesis diágnostica -->
+                <div class="card mb-3">
+                    <div class="card-header">III- Diagnóstico médico o Hipótesis diágnostica</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Diagnóstico médico o Hipótesis diágnostica -->
+                        <div class="form-group  d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Diagnóstico: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <input type="text" name="diagnostico" class="form-control" placeholder="Diagnóstico"
+                                value="{{valoration.diagnostico}}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <!-- IV- Otros problemas de salud -->
+                <div class="card mb-3">
+                    <div class="card-header">IV- Otros problemas de salud</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Otros problemas de salud -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Antecedentes patológicos más relevantes: </label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteAlergias" id="antecedenteAlergias"
+                                    value="true" {{#if valoration.otrosProblemas.antecedenteAlergias}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteAlergias">
+                                    Alergias
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteDbt" id="antecedenteDbt" value="true" {{#if
+                                    valoration.otrosProblemas.antecedenteDbt}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteDbt">
+                                    DBT
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteHta" id="antecedenteHta" value="true" {{#if
+                                    valoration.otrosProblemas.antecedenteHta}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteHta">
+                                    HTA
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteObesidad" id="antecedenteObesidad"
+                                    value="true" {{#if valoration.otrosProblemas.antecedenteObesidad}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteObesidad">
+                                    Obesidad
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteChagas" id="antecedenteChagas" value="true"
+                                    {{#if valoration.otrosProblemas.antecedenteChagas}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteChagas">
+                                    Chagas
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteIrregularidadCicloMenstrual"
+                                    id="antecedenteIrregularidadCicloMenstrual" value="true" {{#if
+                                    valoration.otrosProblemas.antecedenteIrregularidadCicloMenstrual}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteIrregularidadCicloMenstrual">
+                                    Irregularidad Ciclo Menstrual
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteAsma"
+                                    id="antecedenteAsma" value="true" {{#if
+                                    valoration.otrosProblemas.antecedenteAsma}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteAsma">
+                                    Asma
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- V- Indicaciones médicas y plan terapéutico -->
+                <div class="card mb-3">
+                    <div class="card-header">V- Indicaciones médicas y plan terapéutico</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Indicaciones médicas y plan terapéutico -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Descripción: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <input type="text" name="descripcion" class="form-control" placeholder="Descripcion"
+                                value="{{valoration.indicaciones.descripcion}}" disabled>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Exám. Complem.:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="examenesComplementarios" id="examenesComplementariosSi"
+                                    value="Si" {{#ifCond valoration.indicaciones.examenesComplementarios '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="examenesComplementariosSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="examenesComplementarios" id="examenesComplementariosNo"
+                                    value="No" {{#ifCond valoration.indicaciones.examenesComplementarios '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="examenesComplementariosNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Otros:</label>
+                            <input type="text" name="otros" class="form-control" placeholder="Otros" value="{{valoration.indicaciones.otros}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- VI- Situación actual -->
+                <div class="card mb-3">
+                    <div class="card-header">VI- Situación actual</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Situación actual -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Tipo de Evaluación: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="observacionGeneral"
+                                    id="observacionGeneral" value="true" {{#if valoration.situacionActual.observacionGeneral}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="observacionGeneral">
+                                    Observación General
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="entrevista" id="entrevista"
+                                    value="true" {{#if valoration.situacionActual.entrevista}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="entrevista">
+                                    Entrevista
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <!-- <label class="mb-0 mr-2">Exámen Físico: </label> -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenInspeccion"
+                                    id="examenInspeccion" value="true" {{#if valoration.situacionActual.examenInspeccion}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="examenInspeccion">
+                                    Exám. Fco. Inspección
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenAuscultacion"
+                                    id="examenAuscultacion" value="true" {{#if valoration.situacionActual.examenAuscultacion}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="examenAuscultacion">
+                                    Exám. Fco. Auscultación
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenPalpacion"
+                                    id="examenPalpacion" value="true" {{#if valoration.situacionActual.examenPalpacion}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="examenPalpacion">
+                                    Exám. Fco. Palpación
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenPercusion"
+                                    id="examenPercusion" value="true" {{#if valoration.situacionActual.examenPercusion}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="examenPercusion">
+                                    Exám. Fco. Percusión
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 1- Datos de oxigenación (Cardio-respiratorio) -->
+                <div class="card mb-3">
+                    <div class="card-header">1- Datos de oxigenación (Cardio-respiratorio)</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de oxigenación (Cardio-respiratorio) -->
+                        <div class="card mb-3">
+                            <div class="card-header">Respiración</div>
+                            <div class="card-body">
+                                <!-- Campos de Datos de Respiración -->
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Frecuencia Respiratoria: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="frecuenciaRespiratoria" class="form-control w-auto"
+                                        placeholder="Frecuencia Respiratoria" value="{{valoration.oxigenacion.respiracion.frecuenciaRespiratoria}}"
+                                        step="1" disabled><span>r.p.m.</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ritmo: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="ritmoRespiratorio" class="form-control" style="width: min-content;" disabled>
+                                        {{#if valoration.oxigenacion.respiracion.ritmoRespiratorio}}
+                                            <option value="{{valoration.oxigenacion.respiracion.ritmoRespiratorio}}" selected>
+                                                {{valoration.oxigenacion.respiracion.ritmoRespiratorio}}
+                                            </option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Profundidad: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="profundidad" class="form-control" style="width: min-content;" disabled>
+                                        {{#if valoration.oxigenacion.respiracion.profundidad}}
+                                            <option value="{{valoration.oxigenacion.respiracion.profundidad}}" selected>
+                                                {{valoration.oxigenacion.respiracion.profundidad}}
+                                            </option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Simetría: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="simetria" class="form-control" style="width: min-content;" disabled>
+                                        {{#if valoration.oxigenacion.respiracion.simetria}}
+                                            <option value="{{valoration.oxigenacion.respiracion.simetria}}" selected>
+                                                {{valoration.oxigenacion.respiracion.simetria}}
+                                            </option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Vía aérea perm.: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="text" name="viaAerPerm" class="form-control"
+                                        placeholder="Vía aérea perm." value="{{valoration.oxigenacion.respiracion.viaAerPerm}}" disabled>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Secreciones: </label>
+                                    <input type="text" name="secreciones" class="form-control" placeholder="Secreciones"
+                                        value="{{valoration.oxigenacion.respiracion.secreciones}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Color: </label>
+                                    <input type="text" name="color" class="form-control" placeholder="Color"
+                                        value="{{valoration.oxigenacion.respiracion.color}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Tos: </label>
+                                    <input type="text" name="tos" class="form-control" placeholder="Tos"
+                                        value="{{valoration.oxigenacion.respiracion.tos}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Expectoración: </label>
+                                    <input type="text" name="expectoracion" class="form-control"
+                                        placeholder="Expectoracion" value="{{valoration.oxigenacion.respiracion.expectoracion}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Hipoventilación: </label>
+                                    <input type="text" name="hipoventilacion" class="form-control"
+                                        placeholder="Hipoventilacion" value="{{valoration.oxigenacion.respiracion.hipoventilacion}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Disnea: </label>
+                                    <input type="text" name="disnea" class="form-control" placeholder="Disnea"
+                                        value="{{valoration.oxigenacion.respiracion.disnea}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-left">
+                                    <label class="mb-0 mr-2">Auscultación:</label>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscMurmulloVesicular"
+                                            id="auscMurmulloVesicular" value="true" {{#if
+                                            valoration.oxigenacion.respiracion.auscMurmulloVesicular}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscMurmulloVesicular">
+                                            Murmullo Vesicular
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscSibilancias"
+                                            id="auscSibilancias" value="true" {{#if valoration.oxigenacion.respiracion.auscSibilancias}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscSibilancias">
+                                            Sibilancias
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscCrepitantes"
+                                            id="auscCrepitantes" value="true" {{#if valoration.oxigenacion.respiracion.auscCrepitantes}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscCrepitantes">
+                                            Crepitantes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscRoncus"
+                                            id="auscRoncus" value="true" {{#if valoration.oxigenacion.respiracion.auscRoncus}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscRoncus">
+                                            Roncus
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscGorgoteos"
+                                            id="auscGorgoteos" value="true" {{#if valoration.oxigenacion.respiracion.auscGorgoteos}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscGorgoteos">
+                                            Gorgoteos
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-header">Circulación</div>
+                            <div class="card-body">
+                                <!-- Campos de Datos de Circulación -->
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Frecuencia Cardiaca: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="frecuenciaCardiaca" class="form-control w-auto"
+                                        placeholder="Frecuencia Cardiaca" value="{{valoration.oxigenacion.circulacion.frecuenciaCardiaca}}" disabled
+                                        step="1"><span>l.p.m.</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ritmo: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="ritmoCirculacion" class="form-control w-auto" disabled>
+                                        {{#if valoration.oxigenacion.circulacion.ritmoCirculacion}}
+                                            <option value="{{valoration.oxigenacion.circulacion.ritmoCirculacion}}" selected>
+                                                {{valoration.oxigenacion.circulacion.ritmoCirculacion}}
+                                            </option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Intensidad: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="intensidad" class="form-control w-auto" disabled>
+                                        {{#if valoration.oxigenacion.circulacion.intensidad}}
+                                            <option value="{{valoration.oxigenacion.circulacion.intensidad}}" selected>
+                                                {{valoration.oxigenacion.circulacion.intensidad}}
+                                            </option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Tensión: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="tension" class="form-control w-auto"
+                                        placeholder="Tensión" value="{{valoration.oxigenacion.circulacion.tension}}" disabled step="1">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Amplitud: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="amplitud" class="form-control w-auto" disabled>
+                                        {{#if valoration.oxigenacion.circulacion.amplitud}}
+                                            <option value="{{valoration.oxigenacion.circulacion.amplitud}}" selected>
+                                                {{valoration.oxigenacion.circulacion.amplitud}}
+                                            </option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Pulsos Periféricos: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="text" name="pulsosPerifericos" class="form-control"
+                                        placeholder="Pulsos Periféricos" value="{{valoration.oxigenacion.circulacion.pulsosPerifericos}}" disabled>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ruidos Cardiacos:</label>
+                                    <input type="text" name="ruidosCardiacos" class="form-control"
+                                        placeholder="Ruidos Cardiacos" value="{{valoration.oxigenacion.circulacion.ruidosCardiacos}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Latido de Punta:</label>
+                                    <input type="text" name="latidoDePunta" class="form-control"
+                                        placeholder="Latido de Punta" value="{{valoration.oxigenacion.circulacion.latidoDePunta}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Tensión Arterial: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="text" name="tensionArterial" class="form-control"
+                                        placeholder="Tensión Arterial" value="{{valoration.oxigenacion.circulacion.tensionArterial}}" disabled><span>mm Hg</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ingurgitación Yugular:</label>
+                                    <input type="text" name="ingurgitacionYugular" class="form-control"
+                                        placeholder="Ingurgitación Yugular" value="{{valoration.oxigenacion.circulacion.ingurgitacionYugular}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-left">
+                                    <label class="mb-0 mr-2">Coloración de piel y muc.: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coloracionPielYMucRosada"
+                                            id="coloracionPielYMucRosada" value="true" {{#if
+                                            valoration.oxigenacion.circulacion.coloracionPielYMucRosada}}checked{{/if}} disabled>
+                                        <label class="form-check-label" for="coloracionPielYMucRosada">
+                                            Rosada
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coloracionPielYMucPalida"
+                                            id="coloracionPielYMucPalida" value="true" {{#if
+                                            valoration.oxigenacion.circulacion.coloracionPielYMucPalida}}checked{{/if}} disabled>
+                                        <label class="form-check-label" for="coloracionPielYMucPalida">
+                                            Pálida
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="coloracionPielYMucCianosis" id="coloracionPielYMucCianosis"
+                                            value="true" {{#if valoration.oxigenacion.circulacion.coloracionPielYMucCianosis}}checked{{/if}} disabled>
+                                        <label class="form-check-label" for="coloracionPielYMucCianosis">
+                                            Cianosis
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="coloracionPielYMucLivideces" id="coloracionPielYMucLivideces"
+                                            value="true" {{#if valoration.oxigenacion.circulacion.coloracionPielYMucLivideces}}checked{{/if}} disabled>
+                                        <label class="form-check-label" for="coloracionPielYMucLivideces">
+                                            Livideces
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="coloracionPielYMucIctericia" id="coloracionPielYMucIctericia"
+                                            value="true" {{#if valoration.oxigenacion.circulacion.coloracionPielYMucIctericia}}checked{{/if}} disabled>
+                                        <label class="form-check-label" for="coloracionPielYMucIctericia">
+                                            Ictericia
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coloracionPielYMucOtra"
+                                            id="coloracionPielYMucOtra" value="true" {{#if
+                                            valoration.oxigenacion.circulacion.coloracionPielYMucOtra}}checked{{/if}} disabled>
+                                        <label class="form-check-label" for="coloracionPielYMucOtra">
+                                            Otra
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Temperatura Axilar: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="temperaturaAxilar" class="form-control w-auto"
+                                        placeholder="Temperatura Axilar" value="{{valoration.oxigenacion.circulacion.temperaturaAxilar}}" disabled
+                                        step="1"><span>°C</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Temperatura Rectal: </label>
+                                    <input type="number" name="temperaturaRectal" class="form-control w-auto"
+                                        placeholder="Temperatura Rectal" value="{{valoration.oxigenacion.circulacion.temperaturaRectal}}" 
+                                        step="1"><span>°C</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Edemas:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="edemas" id="edemasSi"
+                                            value="Si" {{#ifCond valoration.oxigenacion.circulacion.edemas '===' 'Si' }}checked{{/ifCond}}>
+                                        <label class="form-check-label" for="edemasSi">
+                                            Si
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="edemas" id="edemasNo"
+                                            value="No" {{#ifCond valoration.oxigenacion.circulacion.edemas '===' 'No' }}checked{{/ifCond}}>
+                                        <label class="form-check-label" for="edemasNo">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2- Datos de sensopercepción y actividad -->
+                <div class="card mb-3">
+                    <div class="card-header">2- Datos de sensopercepción y actividad</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de sensopercepción y actividad -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Nivel de Conciencia: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaLucido"
+                                    id="nivelConcienciaLucido" value="true" {{#if valoration.sensopercepcion.nivelConcienciaLucido}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="nivelConcienciaLucido">
+                                    Lúcido
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaConfuso"
+                                    id="nivelConcienciaConfuso" value="true" {{#if
+                                    valoration.sensopercepcion.nivelConcienciaConfuso}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="nivelConcienciaConfuso">
+                                    Confuso
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaDelirante"
+                                    id="nivelConcienciaDelirante" value="true" {{#if
+                                    valoration.sensopercepcion.nivelConcienciaDelirante}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="nivelConcienciaDelirante">
+                                    Delirante
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaEstuporoso"
+                                    id="nivelConcienciaEstuporoso" value="true" {{#if
+                                    valoration.sensopercepcion.nivelConcienciaEstuporoso}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="nivelConcienciaEstuporoso">
+                                    Estuporoso
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaComa"
+                                    id="nivelConcienciaComa" value="true" {{#if valoration.sensopercepcion.nivelConcienciaComa}}checked{{/if}} disabled>
+                                <label class="form-check-label" for="nivelConcienciaComa">
+                                    Coma
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Escala de Coma de GLASGOW Puntaje Total: </label>
+                            <span id="totalSuma">{{totalGlasgow}}</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Apertura Ocular: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select name="aperturaOcular" id="aperturaOcular" class="form-control w-auto" disabled>
+                                {{#if valoration.sensopercepcion.aperturaOcular}}
+                                    <option value="{{valoration.sensopercepcion.aperturaOcular}}" selected>
+                                        {{valoration.sensopercepcion.aperturaOcular}}
+                                    </option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Respuesta Motora: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select name="respuestaMotora" id="respuestaMotora" class="form-control w-auto" disabled>
+                                {{#if valoration.sensopercepcion.respuestaMotora}}
+                                    <option value="{{valoration.sensopercepcion.respuestaMotora}}" selected>
+                                        {{valoration.sensopercepcion.respuestaMotora}}
+                                    </option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Respuesta Verbal: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select name="respuestaVerbal" id="respuestaVerbal" class="form-control w-auto" disabled>
+                                {{#if valoration.sensopercepcion.respuestaVerbal}}
+                                    <option value="{{valoration.sensopercepcion.respuestaVerbal}}" selected>
+                                        {{valoration.sensopercepcion.respuestaVerbal}}
+                                    </option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Tamaño de las pupilas:</label>
+                            <input type="text" name="tamanioPupilas" class="form-control" placeholder="Tamaño de las pupilas"
+                                value="{{valoration.sensopercepcion.tamanioPupilas}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Simetría de las pupilas: </label>
+                            <select name="simetriaPupilas" class="form-control w-auto">
+                                {{#if valoration.sensopercepcion.simetriaPupilas}}
+                                <option value="Simétrica" {{#ifCond valoration.sensopercepcion.simetriaPupilas '===' 'Simétrica'
+                                    }}selected{{/ifCond}}>Simétrica</option>
+                                <option value="Asimétrica" {{#ifCond valoration.sensopercepcion.simetriaPupilas '===' 'Asimétrica'
+                                    }}selected{{/ifCond}}>Asimétrica</option>
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="Simétrica">Simétrica</option>
+                                <option value="Asimétrica">Asimétrica</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Reactividad:</label>
+                            <input type="text" name="reactividad" class="form-control" placeholder="Reactividad"
+                                value="{{valoration.sensopercepcion.reactividad}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Babinsky:</label>
+                            <input type="text" name="babinsky" class="form-control" placeholder="Babinsky"
+                                value="{{valoration.sensopercepcion.babinsky}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Otros:</label>
+                            <input type="text" name="otrosPupilas" class="form-control" placeholder="Otros"
+                                value="{{valoration.sensopercepcion.otrosPupilas}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Afasias:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="afasias" id="afasiasSi"
+                                    value="Si" {{#ifCond valoration.sensopercepcion.afasias '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="afasiasSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="afasias" id="afasiasNo"
+                                    value="No" {{#ifCond valoration.sensopercepcion.afasias '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="afasiasNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Dolor:</label>
+                            <input type="text" name="dolorSensopercepcion" class="form-control" placeholder="Dolor"
+                                value="{{valoration.sensopercepcion.dolorSensopercepcion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Características del dolor:</label>
+                            <input type="text" name="caracteristicasDolor" class="form-control" placeholder="Características del dolor"
+                                value="{{valoration.sensopercepcion.caracteristicasDolor}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Localización del dolor:</label>
+                            <input type="text" name="localizacionDolor" class="form-control" placeholder="Localización del dolor"
+                                value="{{valoration.sensopercepcion.localizacionDolor}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- 3- Datos Nutricionales (Alimentos líquidos y electrolitos) -->
+                <div class="card mb-3">
+                    <div class="card-header">3- Datos Nutricionales (Alimentos liquidos y electrolitos)</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos Nutricionales (Alimentos liquidos y electrolitos) -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Peso:</label>
+                            <input type="number" name="peso" class="form-control w-auto" placeholder="Peso" value="{{valoration.nutricion.peso}}" step="1"><span>kg.</span>
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Talla:</label>
+                            <input type="number" name="talla" class="form-control w-auto" placeholder="Talla" value="{{valoration.nutricion.talla}}" step="1"><span>cm.</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Obesidad:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="obesidad" id="obesidadSi"
+                                    value="Si" {{#ifCond valoration.nutricion.obesidad '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="obesidadSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="obesidad" id="obesidadNo"
+                                    value="No" {{#ifCond valoration.nutricion.obesidad '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="obesidadNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Hidratación:</label>
+                            <input type="text" name="hidratacion" class="form-control" placeholder="Hidratación"
+                                value="{{valoration.nutricion.hidratacion}}">
+                        </div>                        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Signo del pliegue:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="signoPliegue" id="signoPlieguePositivo"
+                                    value="Positivo" {{#ifCond valoration.nutricion.signoPliegue '===' 'Positivo' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="signoPlieguePositivo">
+                                    Positivo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="signoPliegue" id="signoPliegueNegativo"
+                                    value="Negativo" {{#ifCond valoration.nutricion.signoPliegue '===' 'Negativo' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="signoPliegueNegativo">
+                                    Negativo
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Autonomía para alimentarse:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="autonomiaParaAlimentarse" id="autonomiaParaAlimentarseTotal"
+                                    value="Total" {{#ifCond valoration.nutricion.autonomiaParaAlimentarse '===' 'Total' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="autonomiaParaAlimentarseTotal">
+                                    Total
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="autonomiaParaAlimentarse" id="autonomiaParaAlimentarseParcial"
+                                    value="Parcial" {{#ifCond valoration.nutricion.autonomiaParaAlimentarse '===' 'Parcial' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="autonomiaParaAlimentarseParcial">
+                                    Parcial
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="autonomiaParaAlimentarse" id="autonomiaParaAlimentarseNinguna"
+                                    value="Ninguna" {{#ifCond valoration.nutricion.autonomiaParaAlimentarse '===' 'Ninguna' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="autonomiaParaAlimentarseNinguna">
+                                    Ninguna
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Alimentación:</label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">    
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="alimentacionEnteralOral"
+                                    id="alimentacionEnteralOral" value="true" {{#if valoration.nutricion.alimentacionEnteralOral}}checked{{/if}}>
+                                <label class="form-check-label" for="alimentacionEnteralOral">
+                                    Enteral Oral
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="alimentacionEnteralSNG" id="alimentacionEnteralSNG"
+                                    value="true" {{#if valoration.nutricion.alimentacionEnteralSNG}}checked{{/if}}>
+                                <label class="form-check-label" for="alimentacionEnteralSNG">
+                                    Enteral SNG
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ingresos vía oral:</label>
+                            <input type="number" name="ingresosViaOral" class="form-control w-auto" placeholder="Ingresos vía oral" value="{{valoration.nutricion.ingresosViaOral}}" step="1"><span>ml.</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ingresos vía parenteral:</label>
+                            <input type="number" name="ingresosViaParenteral" class="form-control w-auto" placeholder="Ingresos vía parenteral" value="{{valoration.nutricion.ingresosViaParenteral}}" step="1"><span>ml.</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 4- Datos de Eliminación -->
+                <div class="card mb-3">
+                    <div class="card-header">4- Datos de Eliminación</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Eliminación  -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ruidos hidroaéreos:</label>
+                            <input type="text" name="ruidosHidroaereos" class="form-control" placeholder="Ruidos hidroaéreos"
+                                value="{{valoration.eliminacion.ruidosHidroaereos}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Distensión abdominal:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="distencionAbdominal" id="distencionAbdominalSi"
+                                    value="Si" {{#ifCond valoration.eliminacion.distencionAbdominal '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="distencionAbdominalSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="distencionAbdominal" id="distencionAbdominalNo"
+                                    value="No" {{#ifCond valoration.eliminacion.distencionAbdominal '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="distencionAbdominalNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Color de las deposiciones:</label>
+                            <input type="text" name="colorDeposiciones" class="form-control" placeholder="Color de las deposiciones"
+                                value="{{valoration.eliminacion.colorDeposiciones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Consistencia de las deposiciones:</label>
+                            <input type="text" name="consistenciaDeposiciones" class="form-control" placeholder="Consistencia de las deposiciones"
+                                value="{{valoration.eliminacion.consistenciaDeposiciones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Otras características de las deposiciones:</label>
+                            <input type="text" name="otrasCaracteristicasDeposiciones" class="form-control" placeholder="Otras características de las deposiciones"
+                                value="{{valoration.eliminacion.otrasCaracteristicasDeposiciones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Sudoración:</label>
+                            <input type="text" name="sudoracion" class="form-control" placeholder="Sudoración"
+                                value="{{valoration.eliminacion.sudoracion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Total egresos sudoración:</label>
+                            <input type="number" name="totalEgresosSudoracion" class="form-control w-auto" placeholder="Total egresos sudoración" value="{{valoration.eliminacion.totalEgresosSudoracion}}" step="1"><span>ml.</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Pérdida insensible sudoración:</label>
+                            <input type="number" name="perdidaInsensibleSudoracion" class="form-control w-auto" placeholder="Pérdida insensible sudoración" value="{{valoration.eliminacion.perdidaInsensibleSudoracion}}" step="1"><span>ml.</span>
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Total ingresos balance hídrico:</label>
+                            <input type="number" name="totalIngresosBalanceHidrico" class="form-control w-auto" placeholder="Total ingresos balance hídrico" value="{{valoration.eliminacion.totalIngresosBalanceHidrico}}" step="1"><span>ml.</span>
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Total egresos balance hídrico:</label>
+                            <input type="number" name="totalEgresosBalanceHidrico" class="form-control w-auto" placeholder="Total egresos balance hídrico" value="{{valoration.eliminacion.totalEgresosBalanceHidrico}}" step="1"><span>ml.</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 5- Datos de Aseo y valoración de piel -->
+                <div class="card mb-3">
+                    <div class="card-header">5- Datos de Aseo y valoración de piel</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Aseo y valoración de piel -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Lesiones:</label>
+                            <input type="text" name="lesiones" class="form-control" placeholder="Lesiones"
+                                value="{{valoration.aseoYPiel.lesiones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Localización de las lesiones:</label>
+                            <input type="text" name="localizacionLesiones" class="form-control" placeholder="Localización de las lesiones"
+                                value="{{valoration.aseoYPiel.localizacionLesiones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Cicatrices:</label>
+                            <input type="text" name="cicatrices" class="form-control" placeholder="Cicatrices"
+                                value="{{valoration.aseoYPiel.cicatrices}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Localización de las cicatrices:</label>
+                            <input type="text" name="localizacionCicatrices" class="form-control" placeholder="Localización de las cicatrices"
+                                value="{{valoration.aseoYPiel.localizacionCicatrices}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Dispone de:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mudaDeRopa"
+                                    id="mudaDeRopa" value="true" {{#if valoration.aseoYPiel.mudaDeRopa}}checked{{/if}}>
+                                <label class="form-check-label" for="mudaDeRopa">
+                                    Muda de ropa
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="elementosDeHigiene" id="elementosDeHigiene"
+                                    value="true" {{#if valoration.aseoYPiel.elementosDeHigiene}}checked{{/if}}>
+                                <label class="form-check-label" for="elementosDeHigiene">
+                                    Elementos de higiene
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Puede realizar higiene por sí mismo:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="higienePorSiMismo" id="higienePorSiMismoSi"
+                                    value="Si" {{#ifCond valoration.aseoYPiel.higienePorSiMismo '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="higienePorSiMismoSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="higienePorSiMismo" id="higienePorSiMismoNo"
+                                    value="No" {{#ifCond valoration.aseoYPiel.higienePorSiMismo '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="higienePorSiMismoNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 6- Datos de reposo y sueño -->
+                <div class="card mb-3">
+                    <div class="card-header">6- Datos de reposo y sueño</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de reposo y sueño -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Posición en cama:</label>
+                            <input type="text" name="posicionEnCama" class="form-control" placeholder="Posición en cama"
+                                value="{{valoration.reposoYSuenio.posicionEnCama}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Hábitos de descanso nocturno:</label>
+                            <input type="text" name="habitosDescansoNocturno" class="form-control" placeholder="Hábitos de descanso nocturno"
+                                value="{{valoration.reposoYSuenio.habitosDescansoNocturno}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Horas:</label>
+                            <input type="number" name="horas" class="form-control w-auto" placeholder="Horas" value="{{valoration.reposoYSuenio.horas}}" step="1">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Alteración del sueño:</label>
+                            <input type="text" name="alteracionSuenio" class="form-control" placeholder="Alteración del sueño"
+                                value="{{valoration.reposoYSuenio.alteracionSuenio}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Sedantes:</label>
+                            <input type="text" name="sedantes" class="form-control" placeholder="Sedantes"
+                                value="{{valoration.reposoYSuenio.sedantes}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- 7- Datos psicosociales -->
+                <div class="card mb-3">
+                    <div class="card-header">7- Datos psicosociales</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos psicosociales -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Estado de paciente:</label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoMiedo"
+                                    id="estadoMiedo" value="true" {{#if valoration.psicosocial.estadoMiedo}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoMiedo">
+                                    Miedo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoNegativismo"
+                                    id="estadoNegativismo" value="true" {{#if valoration.psicosocial.estadoNegativismo}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoNegativismo">
+                                    Negativismo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoInquietud"
+                                    id="estadoInquietud" value="true" {{#if valoration.psicosocial.estadoInquietud}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoInquietud">
+                                    Inquietud
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">   
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoDepresion"
+                                    id="estadoDepresion" value="true" {{#if valoration.psicosocial.estadoDepresion}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoDepresion">
+                                    Depresión
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoApatia"
+                                    id="estadoApatia" value="true" {{#if valoration.psicosocial.estadoApatia}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoApatia">
+                                    Apatía
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoAnsiedad"
+                                    id="estadoAnsiedad" value="true" {{#if valoration.psicosocial.estadoAnsiedad}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoAnsiedad">
+                                    Ansiedad
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">   
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoAgresividad"
+                                    id="estadoAgresividad" value="true" {{#if valoration.psicosocial.estadoAgresividad}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoAgresividad">
+                                    Agresividad
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoLlanto"
+                                    id="estadoLlanto" value="true" {{#if valoration.psicosocial.estadoLlanto}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoLlanto">
+                                    Llanto
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Creencias religiosas:</label>
+                            <input type="text" name="creenciasReligion" class="form-control" placeholder="Creencias religiosas"
+                                value="{{valoration.psicosocial.creenciasReligion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Trabaja actualmente?:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="trabajaActualmente" id="trabajaActualmenteSi"
+                                    value="Si" {{#ifCond valoration.psicosocial.trabajaActualmente '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="trabajaActualmenteSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="trabajaActualmente" id="trabajaActualmenteNo"
+                                    value="No" {{#ifCond valoration.psicosocial.trabajaActualmente '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="trabajaActualmenteNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ocupación:</label>
+                            <input type="text" name="ocupacion" class="form-control" placeholder="Ocupación"
+                                value="{{valoration.psicosocial.ocupacion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Desde cuándo trabaja?:</label>
+                            <input type="text" name="desdeCuandoTrabaja" class="form-control" placeholder="Desde cuándo trabaja"
+                                value="{{valoration.psicosocial.desdeCuandoTrabaja}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Cómo se siente en el trabajo?:</label>
+                            <input type="text" name="sentimientoEnTrabajo" class="form-control" placeholder="Sentimiento en el trabajo"
+                                value="{{valoration.psicosocial.sentimientoEnTrabajo}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Escolaridad: </label>
+                            <select name="escolaridad" class="form-control w-auto">
+                                {{#if valoration.psicosocial.escolaridad}}
+                                <option value="Incompleta" {{#ifCond valoration.psicosocial.escolaridad '===' 'Incompleta'
+                                    }}selected{{/ifCond}}>Incompleta</option>
+                                <option value="Primaria" {{#ifCond valoration.psicosocial.escolaridad '===' 'Primaria'
+                                    }}selected{{/ifCond}}>Primaria</option>
+                                <option value="Secundaria" {{#ifCond valoration.psicosocial.escolaridad '===' 'Secundaria'
+                                    }}selected{{/ifCond}}>Secundaria</option>
+                                <option value="Terciaria" {{#ifCond valoration.psicosocial.escolaridad '===' 'Terciaria'
+                                    }}selected{{/ifCond}}>Terciaria</option>
+                                <option value="Universitaria" {{#ifCond valoration.psicosocial.escolaridad '===' 'Universitaria'
+                                    }}selected{{/ifCond}}>Universitaria</option>
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="Incompleta">Incompleta</option>
+                                <option value="Primaria">Primaria</option>
+                                <option value="Secundaria">Secundaria</option>
+                                <option value="Terciaria">Terciaria</option>
+                                <option value="Universitaria">Universitaria</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Aprendizaje: </label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aprendizajeDeseaAprender"
+                                    id="aprendizajeDeseaAprender" value="true" {{#if valoration.psicosocial.aprendizajeDeseaAprender}}checked{{/if}}>
+                                <label class="form-check-label" for="aprendizajeDeseaAprender">
+                                    Desea aprender su enfermedad
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aprendizajeNegacionAlTratamiento"
+                                    id="aprendizajeNegacionAlTratamiento" value="true" {{#if valoration.psicosocial.aprendizajeNegacionAlTratamiento}}checked{{/if}}>
+                                <label class="form-check-label" for="aprendizajeNegacionAlTratamiento">
+                                    Se niega al tratamiento
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aprendizajeAceptacionAlTratamiento"
+                                    id="aprendizajeAceptacionAlTratamiento" value="true" {{#if valoration.psicosocial.aprendizajeAceptacionAlTratamiento}}checked{{/if}}>
+                                <label class="form-check-label" for="aprendizajeAceptacionAlTratamiento">
+                                    Lo acepta
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 8- Factores de riesgo -->
+                <div class="card mb-3">
+                    <div class="card-header">8- Factores de riesgo</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Factores de riesgo -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Tabaquismo:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tabaquismo" id="tabaquismoSi"
+                                    value="Si" {{#ifCond valoration.riesgo.tabaquismo '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="tabaquismoSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tabaquismo" id="tabaquismoNo"
+                                    value="No" {{#ifCond valoration.riesgo.tabaquismo '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="tabaquismoNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center" id="tabaquismoCuantosSection">
+                            <label class="mb-0 mr-2">¿Cuántos cigarrillos fuma al día?:</label>
+                            <input type="number" name="tabaquismoCuantos" class="form-control w-auto" placeholder="¿Cuántos cigarrillos fuma al día?" value="{{#ifCond valoration.riesgo.tabaquismo '===' 'No'}}{{0}}{{else}}{{valoration.riesgo.tabaquismoCuantos}}{{/ifCond}}" min="0" max="10000" step="1">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Consumo de alcohol:</label>
+                            <input type="text" name="consumoAlcohol" class="form-control" placeholder="Consumo de alcohol"
+                                value="{{valoration.riesgo.consumoAlcohol}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Enfermedades preexistentes:</label>
+                            <input type="text" name="enfermedadesPreexistentes" class="form-control" placeholder="Enfermedades preexistentes"
+                                value="{{valoration.riesgo.enfermedadesPreexistentes}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Motivo de fallecimiento de los padres:</label>
+                            <input type="text" name="motivoFallecimientoPadres" class="form-control" placeholder="Motivo de fallecimiento de los padres"
+                                value="{{valoration.riesgo.motivoFallecimientoPadres}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Motivo de fallecimiento de los hermanos:</label>
+                            <input type="text" name="motivoFallecimientoHermanos" class="form-control" placeholder="Motivo de fallecimiento de los hermanos"
+                                value="{{valoration.riesgo.motivoFallecimientoHermanos}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Motivo de fallecimiento de los abuelos:</label>
+                            <input type="text" name="motivoFallecimientoAbuelos" class="form-control" placeholder="Motivo de fallecimiento de los abuelos"
+                                value="{{valoration.riesgo.motivoFallecimientoAbuelos}}">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabaquismoSiRadio = document.getElementById('tabaquismoSi');
+        const tabaquismoNoRadio = document.getElementById('tabaquismoNo');
+        const tabaquismoCuantosInput = document.querySelector('input[name="tabaquismoCuantos"]');
+
+        // Manejar el cambio en los botones de radio de tabaquismo
+        function handleTabaquismoChange() {
+            if (tabaquismoSiRadio.checked) {
+                tabaquismoCuantosInput.disabled = false;
+            } else {
+                tabaquismoCuantosInput.value = 0;
+                tabaquismoCuantosInput.disabled = true;
+            }
+        }
+
+        // Event listeners para cambios en los botones de radio de tabaquismo
+        tabaquismoSiRadio.addEventListener('change', handleTabaquismoChange);
+        tabaquismoNoRadio.addEventListener('change', handleTabaquismoChange);
+
+        // Llamada inicial para configurar el estado del campo tabaquismoCuantos al cargar la página
+        handleTabaquismoChange();                 
+    });
+
+document.querySelector('form').addEventListener('submit', (event) => {
+    if (document.getElementById('tabaquismoNo').checked) {
+        document.querySelector('input[name="tabaquismoCuantos"]').value = '0';
+    }
+});
+</script>
