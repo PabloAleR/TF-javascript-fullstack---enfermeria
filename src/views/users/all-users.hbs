@@ -1,0 +1,63 @@
+<div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+        <form action="/users" method="GET">
+            <div class="input-group"  style="margin-top: 20px;">
+                <input type="text" class="form-control" placeholder="Ingresar Apellido, o Nombre, o DNI" name="search" value="{{#if search}}{{search}}{{/if}}">
+                <div class="input-group-append">
+                    <button class="btn btn-dark" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    {{#if noResults}}
+        <div class="card mx-auto">
+            <div class="card-body">
+                <p class="lead">{{#if search}}No hay coincidencias para "{{search}}".{{else}}No hay Usuarios aún.{{/if}}</p>
+            </div>
+        </div>
+    {{else}} 
+        <h3 class="text-center w-100 text-white">Usuarios</h3>
+        {{#each users}}
+            <div class="col-md-6 d-flex justify-content-center">
+                <div class="card mb-5 w-100">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">
+                            Apellido y Nombre: {{profesional.apellido}} {{profesional.nombre}}                          
+                        </h4>
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Nombre de Usuario: {{nombreUsuario}}</span> Rol: {{rolUsuario}}
+                        </p>
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Fecha de Creación: {{date}}</span> Hora: {{time}}
+                        </p>
+                        <p class="text-center">
+                            <span style="margin-right: 25px;">Email: {{email}}
+                        </p>
+                        <form action="/users/show/{{_id}}" method="GET" class="mb-2">
+                            <button class="btn btn-info btn-block btn-sm" type="submit">
+                                Ver Usuario
+                            </button>
+                        </form>
+                        
+                        <form action="/users/delete/{{_id}}?_method=DELETE" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar a este usuario?\nApellido: {{profesional.apellido}}\nNombre: {{profesional.nombre}}\nNombre de Usuario: {{nombreUsuario}}\nRol: {{rolUsuario}}')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger btn-block btn-sm" type="submit">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+        <div class="card mx-auto">
+            <div class="card-body">
+                <p class="lead">No hay Usuarios aún.</p>
+                <a href="/users/add" class="btn btn-success btn-block">Crear un Usuario</a>
+            </div>
+        </div>
+        {{/each}}
+    {{/if}}
+</div>

@@ -1,0 +1,1856 @@
+<div class="col-md-10 mx-auto mt-4">
+    <card class="card">
+        <div class="card-header">
+            <h3 class="text-center">Nueva Valoración</h3>
+        </div>
+        <div class="card-body">
+            <form action="/valorations/new-valoration" method="POST">
+                <!-- I- Datos personales del Paciente -->
+                <div class="card mb-3">
+                    <div class="card-header">I- Datos personales del Paciente</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos del Paciente -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">DNI:</label>
+                            <input type="number" name="dni" class="form-control w-auto" placeholder="DNI" value="{{dni}}"
+                                min="5000000" max="80000000" step="1" autofocus>
+                        </div>                        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Apellido:</label>
+                            <input type="text" name="apellido" class="form-control" placeholder="Apellido"
+                                value="{{apellido}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Nombre:</label>
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre"
+                                value="{{nombre}}">
+                        </div>
+                        <div class="form-group  d-flex align-items-center">
+                            <label class="mb-0 mr-2">Fecha de Nacimiento:</label>
+                            <input type="date" name="fechaNacimiento" class="form-control"
+                                placeholder="Fecha de Nacimiento" value="{{fechaNacimiento}}"
+                                max="{{maxDate}}" style="width: min-content;">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Sexo: <span class="text-danger font-weight-bold">*</span></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sexo" id="masculino"
+                                    value="Masculino" {{#ifCond sexo '===' 'Masculino' }}checked{{/ifCond}} required>
+                                <label class="form-check-label" for="masculino">
+                                    Masculino
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sexo" id="femenino" value="Femenino"
+                                    {{#ifCond sexo '===' 'Femenino' }}checked{{/ifCond}} required>
+                                <label class="form-check-label" for="femenino">
+                                    Femenino
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Estado Civil:</label>
+                            <input type="text" name="estadoCivil" class="form-control" placeholder="Estado Civil"
+                                value="{{estadoCivil}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Domicilio Actual:</label>
+                            <input type="text" name="domicilioActual" class="form-control"
+                                placeholder="Domicilio Actual" value="{{domicilioActual}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Cobertura de Salud:</label>
+                            <input type="text" name="coberturaSalud" class="form-control"
+                                placeholder="Cobertura de Salud" value="{{coberturaSalud}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Nacionalidad:</label>
+                            <input type="text" name="nacionalidad" class="form-control" placeholder="Nacionalidad"
+                                value="{{nacionalidad}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Procedencia:</label>
+                            <input type="text" name="procedencia" class="form-control" placeholder="Procedencia"
+                                value="{{procedencia}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- II- Datos de Ingreso a Internación -->
+                <div class="card mb-3">
+                    <div class="card-header"> II- Datos de Ingreso a Internación</div>
+                    <div class="card-body">
+                        <!-- Campos de Internación -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Motivo de Ingreso: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <input type="text" name="motivoIngreso" class="form-control" placeholder="Motivo de Ingreso"
+                                value="{{motivoIngreso}}" required>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Servicio: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select id="servicio" name="servicio" class="form-control" required
+                                style="width: min-content;">
+                                <option value="">Selecciona un servicio</option> <!-- Opción vacía -->
+                                {{#each services}}
+                                <option value="{{this._id}}" data-name="{{this.nombre}}" {{#ifCond ../servicio '==='
+                                    (toString this.nombre)}}selected{{/ifCond}}>{{this.nombre}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <!-- Campo oculto para el nombre del servicio -->
+                        <input type="hidden" id="servicioNombre" name="servicioNombre">
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Número de Cama: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select id="bedSelect" name="numeroCama" class="form-control" required
+                                style="width: min-content;" disabled>
+                                <!-- Las opciones de cama se llenarán dinámicamente con JavaScript -->
+                                {{#each beds}}
+                                <option value="{{this.numeroCama}}" {{#ifCond ../numeroCama '===' (toString
+                                    this.numeroCama)}}selected{{/ifCond}}>{{this.numeroCama}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <script id="bedsJson" type="application/json">{{{bedsJson}}}</script>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Tipo de Ingreso: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoIngreso" id="programado"
+                                    value="Programado" {{#ifCond tipoIngreso '===' 'Programado' }}checked{{/ifCond}} required>
+                                <label class="form-check-label" for="programado">
+                                    Programado
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipoIngreso" id="urgencia"
+                                    value="Urgencia" {{#ifCond tipoIngreso '===' 'Urgencia' }}checked{{/ifCond}} required>
+                                <label class="form-check-label" for="urgencia">
+                                    Urgencia
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- III- Diagnóstico médico o Hipótesis diágnostica -->
+                <div class="card mb-3">
+                    <div class="card-header">III- Diagnóstico médico o Hipótesis diágnostica</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Diagnóstico médico o Hipótesis diágnostica -->
+                        <div class="form-group  d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Diagnóstico: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <input type="text" name="diagnostico" class="form-control" placeholder="Diagnóstico"
+                                value="{{diagnostico}}" required>
+                        </div>
+                    </div>
+                </div>
+                <!-- IV- Otros problemas de salud -->
+                <div class="card mb-3">
+                    <div class="card-header">IV- Otros problemas de salud</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Otros problemas de salud -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Antecedentes patológicos más relevantes: </label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteAlergias" id="antecedenteAlergias"
+                                    value="true" {{#if antecedenteAlergias}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteAlergias">
+                                    Alergias
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteDbt" id="antecedenteDbt" value="true" {{#if
+                                    antecedenteDbt}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteDbt">
+                                    DBT
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteHta" id="antecedenteHta" value="true" {{#if
+                                    antecedenteHta}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteHta">
+                                    HTA
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteObesidad" id="antecedenteObesidad"
+                                    value="true" {{#if antecedenteObesidad}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteObesidad">
+                                    Obesidad
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteChagas" id="antecedenteChagas" value="true"
+                                    {{#if antecedenteChagas}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteChagas">
+                                    Chagas
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteIrregularidadCicloMenstrual"
+                                    id="antecedenteIrregularidadCicloMenstrual" value="true" {{#if
+                                    antecedenteIrregularidadCicloMenstrual}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteIrregularidadCicloMenstrual">
+                                    Irregularidad Ciclo Menstrual
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="antecedenteAsma" id="antecedenteAsma" value="true" {{#if
+                                    antecedenteAsma}}checked{{/if}}>
+                                <label class="form-check-label" for="antecedenteAsma">
+                                    Asma
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- V- Indicaciones médicas y plan terapéutico -->
+                <div class="card mb-3">
+                    <div class="card-header">V- Indicaciones médicas y plan terapéutico</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Indicaciones médicas y plan terapéutico -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;">Descripción: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <input type="text" name="descripcion" class="form-control" placeholder="Descripcion"
+                                value="{{descripcion}}" required>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Exám. Complem.:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="examenesComplementarios" id="examenesComplementariosSi"
+                                    value="Si" {{#ifCond examenesComplementarios '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="examenesComplementariosSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="examenesComplementarios" id="examenesComplementariosNo"
+                                    value="No" {{#ifCond examenesComplementarios '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="examenesComplementariosNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Otros:</label>
+                            <input type="text" name="otros" class="form-control" placeholder="Otros" value="{{otros}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- VI- Situación actual -->
+                <div class="card mb-3">
+                    <div class="card-header">VI- Situación actual</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Situación actual -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Tipo de Evaluación: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="observacionGeneral"
+                                    id="observacionGeneral" value="true" {{#if observacionGeneral}}checked{{/if}}>
+                                <label class="form-check-label" for="observacionGeneral">
+                                    Observación General
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="entrevista" id="entrevista"
+                                    value="true" {{#if entrevista}}checked{{/if}}>
+                                <label class="form-check-label" for="entrevista">
+                                    Entrevista
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <!-- <label class="mb-0 mr-2">Exámen Físico: </label> -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenInspeccion"
+                                    id="examenInspeccion" value="true" {{#if examenInspeccion}}checked{{/if}}>
+                                <label class="form-check-label" for="examenInspeccion">
+                                    Exám. Fco. Inspección
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenAuscultacion"
+                                    id="examenAuscultacion" value="true" {{#if examenAuscultacion}}checked{{/if}}>
+                                <label class="form-check-label" for="examenAuscultacion">
+                                    Exám. Fco. Auscultación
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenPalpacion"
+                                    id="examenPalpacion" value="true" {{#if examenPalpacion}}checked{{/if}}>
+                                <label class="form-check-label" for="examenPalpacion">
+                                    Exám. Fco. Palpación
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="examenPercusion"
+                                    id="examenPercusion" value="true" {{#if examenPercusion}}checked{{/if}}>
+                                <label class="form-check-label" for="examenPercusion">
+                                    Exám. Fco. Percusión
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 1- Datos de oxigenación (Cardio-respiratorio) -->
+                <div class="card mb-3">
+                    <div class="card-header">1- Datos de oxigenación (Cardio-respiratorio)</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de oxigenación (Cardio-respiratorio) -->
+                        <div class="card mb-3">
+                            <div class="card-header">Respiración</div>
+                            <div class="card-body">
+                                <!-- Campos de Datos de Respiración -->
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Frecuencia Respiratoria: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="frecuenciaRespiratoria" class="form-control w-auto"
+                                        placeholder="Frecuencia Respiratoria" value="{{frecuenciaRespiratoria}}"
+                                        min="10" max="70" step="1" required><span>r.p.m.</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ritmo: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="ritmoRespiratorio" class="form-control w-auto">
+                                        {{#if ritmoRespiratorio}}
+                                        <option value="Regular" {{#ifCond ritmoRespiratorio '===' 'Regular'
+                                            }}selected{{/ifCond}}>Regular</option>
+                                        <option value="Irregular" {{#ifCond ritmoRespiratorio '===' 'Irregular'
+                                            }}selected{{/ifCond}}>Irregular</option>
+                                        {{else}}
+                                        <option value="" selected disabled hidden>Seleccione una opción</option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Irregular">Irregular</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Profundidad: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="profundidad" class="form-control w-auto">
+                                        {{#if profundidad}}
+                                        <option value="Superficial" {{#ifCond profundidad '===' 'Superficial'
+                                            }}selected{{/ifCond}}>Superficial</option>
+                                        <option value="Normal" {{#ifCond profundidad '===' 'Normal'
+                                            }}selected{{/ifCond}}>Normal</option>
+                                        <option value="Profunda" {{#ifCond profundidad '===' 'Profunda'
+                                            }}selected{{/ifCond}}>Profunda</option>
+                                        {{else}}
+                                        <option value="" selected disabled hidden>Seleccione una opción</option>
+                                        <option value="Superficial">Superficial</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Profunda">Profunda</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Simetría: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="simetria" class="form-control w-auto">
+                                        {{#if simetria}}
+                                        <option value="Simétrica" {{#ifCond simetria '===' 'Simétrica'
+                                            }}selected{{/ifCond}}>Simétrica</option>
+                                        <option value="Asimétrica" {{#ifCond simetria '===' 'Asimétrica'
+                                            }}selected{{/ifCond}}>Asimétrica</option>
+                                        {{else}}
+                                        <option value="" selected disabled hidden>Seleccione una opción</option>
+                                        <option value="Simétrica">Simétrica</option>
+                                        <option value="Asimétrica">Asimétrica</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Vía aérea perm.: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="text" name="viaAerPerm" class="form-control"
+                                        placeholder="Vía aérea perm." value="{{viaAerPerm}}" required>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Secreciones: </label>
+                                    <input type="text" name="secreciones" class="form-control" placeholder="Secreciones"
+                                        value="{{secreciones}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Color: </label>
+                                    <input type="text" name="color" class="form-control" placeholder="Color"
+                                        value="{{color}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Tos: </label>
+                                    <input type="text" name="tos" class="form-control" placeholder="Tos"
+                                        value="{{tos}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Expectoración: </label>
+                                    <input type="text" name="expectoracion" class="form-control"
+                                        placeholder="Expectoracion" value="{{expectoracion}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Hipoventilación: </label>
+                                    <input type="text" name="hipoventilacion" class="form-control"
+                                        placeholder="Hipoventilacion" value="{{hipoventilacion}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Disnea: </label>
+                                    <input type="text" name="disnea" class="form-control" placeholder="Disnea"
+                                        value="{{disnea}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-left">
+                                    <label class="mb-0 mr-2">Auscultación:</label>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscMurmulloVesicular"
+                                            id="auscMurmulloVesicular" value="true" {{#if
+                                            auscMurmulloVesicular}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscMurmulloVesicular">
+                                            Murmullo Vesicular
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscSibilancias"
+                                            id="auscSibilancias" value="true" {{#if auscSibilancias}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscSibilancias">
+                                            Sibilancias
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscCrepitantes"
+                                            id="auscCrepitantes" value="true" {{#if auscCrepitantes}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscCrepitantes">
+                                            Crepitantes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscRoncus"
+                                            id="auscRoncus" value="true" {{#if auscRoncus}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscRoncus">
+                                            Roncus
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="auscGorgoteos"
+                                            id="auscGorgoteos" value="true" {{#if auscGorgoteos}}checked{{/if}}>
+                                        <label class="form-check-label" for="auscGorgoteos">
+                                            Gorgoteos
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-header">Circulación</div>
+                            <div class="card-body">
+                                <!-- Campos de Datos de Circulación -->
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Frecuencia Cardiaca: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="frecuenciaCardiaca" class="form-control w-auto"
+                                        placeholder="Frecuencia Cardiaca" value="{{frecuenciaCardiaca}}"
+                                        min="35" max="200" step="1" required><span>l.p.m.</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ritmo: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="ritmoCirculacion" class="form-control w-auto">
+                                        {{#if ritmoCirculacion}}
+                                        <option value="Regular" {{#ifCond ritmoCirculacion '===' 'Regular'
+                                            }}selected{{/ifCond}}>Regular</option>
+                                        <option value="Irregular" {{#ifCond ritmoCirculacion '===' 'Irregular'
+                                            }}selected{{/ifCond}}>Irregular</option>
+                                        {{else}}
+                                        <option value="" selected disabled hidden>Seleccione una opción</option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Irregular">Irregular</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Intensidad: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="intensidad" class="form-control w-auto">
+                                        {{#if intensidad}}
+                                        <option value="Débil" {{#ifCond intensidad '===' 'Débil' }}selected{{/ifCond}}>
+                                            Débil</option>
+                                        <option value="Normal" {{#ifCond intensidad '===' 'Normal'
+                                            }}selected{{/ifCond}}>Normal</option>
+                                        <option value="Fuerte" {{#ifCond intensidad '===' 'Fuerte'
+                                            }}selected{{/ifCond}}>Fuerte</option>
+                                        {{else}}
+                                        <option value="" selected disabled hidden>Seleccione una opción</option>
+                                        <option value="Débil">Débil</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Fuerte">Fuerte</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Tensión: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="tension" class="form-control w-auto"
+                                        placeholder="Tensión" value="{{tension}}" step="1" required>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Amplitud: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <select name="amplitud" class="form-control w-auto">
+                                        {{#if amplitud}}
+                                        <option value="Débil" {{#ifCond amplitud '===' 'Débil' }}selected{{/ifCond}}>
+                                            Débil</option>
+                                        <option value="Normal" {{#ifCond amplitud '===' 'Normal' }}selected{{/ifCond}}>
+                                            Normal</option>
+                                        <option value="Fuerte" {{#ifCond amplitud '===' 'Fuerte' }}selected{{/ifCond}}>
+                                            Fuerte</option>
+                                        {{else}}
+                                        <option value="" selected disabled hidden>Seleccione una opción</option>
+                                        <option value="Débil">Débil</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Fuerte">Fuerte</option>
+                                        {{/if}}
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Pulsos Periféricos: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="text" name="pulsosPerifericos" class="form-control"
+                                        placeholder="Pulsos Periféricos" value="{{pulsosPerifericos}}" required>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ruidos Cardiacos:</label>
+                                    <input type="text" name="ruidosCardiacos" class="form-control"
+                                        placeholder="Ruidos Cardiacos" value="{{ruidosCardiacos}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Latido de Punta:</label>
+                                    <input type="text" name="latidoDePunta" class="form-control"
+                                        placeholder="Latido de Punta" value="{{latidoDePunta}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Tensión Arterial: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="text" name="tensionArterial" class="form-control w-auto"
+                                        placeholder="Tensión Arterial" value="{{tensionArterial}}" required><span>mm Hg</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Ingurgitación Yugular:</label>
+                                    <input type="text" name="ingurgitacionYugular" class="form-control"
+                                        placeholder="Ingurgitación Yugular" value="{{ingurgitacionYugular}}">
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-left">
+                                    <label class="mb-0 mr-2">Coloración de piel y muc.: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coloracionPielYMucRosada"
+                                            id="coloracionPielYMucRosada" value="true" {{#if
+                                            coloracionPielYMucRosada}}checked{{/if}}>
+                                        <label class="form-check-label" for="coloracionPielYMucRosada">
+                                            Rosada
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coloracionPielYMucPalida"
+                                            id="coloracionPielYMucPalida" value="true" {{#if
+                                            coloracionPielYMucPalida}}checked{{/if}}>
+                                        <label class="form-check-label" for="coloracionPielYMucPalida">
+                                            Pálida
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="coloracionPielYMucCianosis" id="coloracionPielYMucCianosis"
+                                            value="true" {{#if coloracionPielYMucCianosis}}checked{{/if}}>
+                                        <label class="form-check-label" for="coloracionPielYMucCianosis">
+                                            Cianosis
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="coloracionPielYMucLivideces" id="coloracionPielYMucLivideces"
+                                            value="true" {{#if coloracionPielYMucLivideces}}checked{{/if}}>
+                                        <label class="form-check-label" for="coloracionPielYMucLivideces">
+                                            Livideces
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                            name="coloracionPielYMucIctericia" id="coloracionPielYMucIctericia"
+                                            value="true" {{#if coloracionPielYMucIctericia}}checked{{/if}}>
+                                        <label class="form-check-label" for="coloracionPielYMucIctericia">
+                                            Ictericia
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coloracionPielYMucOtra"
+                                            id="coloracionPielYMucOtra" value="true" {{#if
+                                            coloracionPielYMucOtra}}checked{{/if}}>
+                                        <label class="form-check-label" for="coloracionPielYMucOtra">
+                                            Otra
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Temperatura Axilar: <span
+                                            class="text-danger font-weight-bold">*</span></label>
+                                    <input type="number" name="temperaturaAxilar" class="form-control w-auto"
+                                        placeholder="Temperatura Axilar" value="{{temperaturaAxilar}}" min="25" max="45" 
+                                        required step="1"><span>°C</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Temperatura Rectal: </label>
+                                    <input type="number" name="temperaturaRectal" class="form-control w-auto"
+                                        placeholder="Temperatura Rectal" value="{{temperaturaRectal}}" min="25" max="45"
+                                        step="1"><span>°C</span>
+                                </div>
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="mb-0 mr-2">Edemas:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="edemas" id="edemasSi"
+                                            value="Si" {{#ifCond edemas '===' 'Si' }}checked{{/ifCond}}>
+                                        <label class="form-check-label" for="edemasSi">
+                                            Si
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="edemas" id="edemasNo"
+                                            value="No" {{#ifCond edemas '===' 'No' }}checked{{/ifCond}}>
+                                        <label class="form-check-label" for="edemasNo">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 2- Datos de sensopercepción y actividad -->
+                <div class="card mb-3">
+                    <div class="card-header">2- Datos de sensopercepción y actividad</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de sensopercepción y actividad -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Nivel de Conciencia: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaLucido"
+                                    id="nivelConcienciaLucido" value="true" {{#if nivelConcienciaLucido}}checked{{/if}}>
+                                <label class="form-check-label" for="nivelConcienciaLucido">
+                                    Lúcido
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaConfuso"
+                                    id="nivelConcienciaConfuso" value="true" {{#if
+                                    nivelConcienciaConfuso}}checked{{/if}}>
+                                <label class="form-check-label" for="nivelConcienciaConfuso">
+                                    Confuso
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaDelirante"
+                                    id="nivelConcienciaDelirante" value="true" {{#if
+                                    nivelConcienciaDelirante}}checked{{/if}}>
+                                <label class="form-check-label" for="nivelConcienciaDelirante">
+                                    Delirante
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaEstuporoso"
+                                    id="nivelConcienciaEstuporoso" value="true" {{#if
+                                    nivelConcienciaEstuporoso}}checked{{/if}}>
+                                <label class="form-check-label" for="nivelConcienciaEstuporoso">
+                                    Estuporoso
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="nivelConcienciaComa"
+                                    id="nivelConcienciaComa" value="true" {{#if nivelConcienciaComa}}checked{{/if}}>
+                                <label class="form-check-label" for="nivelConcienciaComa">
+                                    Coma
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Escala de Coma de GLASGOW Puntaje Total: </label>
+                            <span id="totalSuma">0</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Apertura Ocular: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select name="aperturaOcular" id="aperturaOcular" class="form-control w-auto">
+                                {{#if aperturaOcular}}
+                                <option value="1" {{#ifCond aperturaOcular '===' '1'
+                                    }}selected{{/ifCond}}>Ninguna: 1</option>
+                                <option value="2" {{#ifCond aperturaOcular '===' '2'
+                                    }}selected{{/ifCond}}>Al estímulo doloroso: 2</option>
+                                <option value="3" {{#ifCond aperturaOcular '===' '3'
+                                    }}selected{{/ifCond}}>Al estímulo verbal: 3</option>
+                                <option value="4" {{#ifCond aperturaOcular '===' '4'
+                                    }}selected{{/ifCond}}>Espontánea: 4</option>    
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="1">Ninguna: 1</option>
+                                <option value="2">Al estímulo doloroso: 2</option>
+                                <option value="3">Al estímulo verbal: 3</option>
+                                <option value="4">Espontánea: 4</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Respuesta Motora: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select name="respuestaMotora" id="respuestaMotora" class="form-control w-auto">
+                                {{#if respuestaMotora}}
+                                <option value="1" {{#ifCond respuestaMotora '===' '1'
+                                    }}selected{{/ifCond}}>Ninguna: 1</option>
+                                <option value="2" {{#ifCond respuestaMotora '===' '2'
+                                    }}selected{{/ifCond}}>Extensión: 2</option>
+                                <option value="3" {{#ifCond respuestaMotora '===' '3'
+                                    }}selected{{/ifCond}}>Flexión Inapropiada: 3</option>
+                                <option value="4" {{#ifCond respuestaMotora '===' '4'
+                                    }}selected{{/ifCond}}>Flexión Apropiada: 4</option>
+                                <option value="5" {{#ifCond respuestaMotora '===' '5'
+                                    }}selected{{/ifCond}}>Localiza estímulos: 5</option>
+                                <option value="6" {{#ifCond respuestaMotora '===' '6'
+                                    }}selected{{/ifCond}}>Obdedece órdenes: 6</option>
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="1">Ninguna: 1</option>
+                                <option value="2">Extensión: 2</option>
+                                <option value="3">Flexión Inapropiada: 3</option>
+                                <option value="4">Flexión Apropiada: 4</option>
+                                <option value="5">Localiza estímulos: 5</option>
+                                <option value="6">Obdedece órdenes: 6</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Respuesta Verbal: <span
+                                    class="text-danger font-weight-bold">*</span></label>
+                            <select name="respuestaVerbal" id="respuestaVerbal" class="form-control w-auto">
+                                {{#if respuestaVerbal}}
+                                <option value="1" {{#ifCond respuestaVerbal '===' '1'
+                                    }}selected{{/ifCond}}>Ninguna: 1</option>
+                                <option value="2" {{#ifCond respuestaVerbal '===' '2'
+                                    }}selected{{/ifCond}}>Sonidos Incomprensibles: 2</option>
+                                <option value="3" {{#ifCond respuestaVerbal '===' '3'
+                                    }}selected{{/ifCond}}>Palabras inapropiadas: 3</option>
+                                <option value="4" {{#ifCond respuestaVerbal '===' '4'
+                                    }}selected{{/ifCond}}>Confuso: 4</option>
+                                <option value="5" {{#ifCond respuestaVerbal '===' '5'
+                                    }}selected{{/ifCond}}>Orientado conserva: 5</option>
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="1">Ninguna: 1</option>
+                                <option value="2">Sonidos Incomprensibles: 2</option>
+                                <option value="3">Palabras inapropiadas: 3</option>
+                                <option value="4">Confuso: 4</option>
+                                <option value="5">Orientado conserva: 5</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Tamaño de las pupilas:</label>
+                            <input type="text" name="tamanioPupilas" class="form-control" placeholder="Tamaño de las pupilas"
+                                value="{{tamanioPupilas}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Simetría de las pupilas: </label>
+                            <select name="simetriaPupilas" class="form-control w-auto">
+                                {{#if simetriaPupilas}}
+                                <option value="Simétrica" {{#ifCond simetriaPupilas '===' 'Simétrica'
+                                    }}selected{{/ifCond}}>Simétrica</option>
+                                <option value="Asimétrica" {{#ifCond simetriaPupilas '===' 'Asimétrica'
+                                    }}selected{{/ifCond}}>Asimétrica</option>
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="Simétrica">Simétrica</option>
+                                <option value="Asimétrica">Asimétrica</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Reactividad:</label>
+                            <input type="text" name="reactividad" class="form-control" placeholder="Reactividad"
+                                value="{{reactividad}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Babinsky:</label>
+                            <input type="text" name="babinsky" class="form-control" placeholder="Babinsky"
+                                value="{{babinsky}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Otros:</label>
+                            <input type="text" name="otrosPupilas" class="form-control" placeholder="Otros"
+                                value="{{otrosPupilas}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Afasias:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="afasias" id="afasiasSi"
+                                    value="Si" {{#ifCond afasias '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="afasiasSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="afasias" id="afasiasNo"
+                                    value="No" {{#ifCond afasias '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="afasiasNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Dolor:</label>
+                            <input type="text" name="dolorSensopercepcion" class="form-control" placeholder="Dolor"
+                                value="{{dolorSensopercepcion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Características del dolor:</label>
+                            <input type="text" name="caracteristicasDolor" class="form-control" placeholder="Características del dolor"
+                                value="{{caracteristicasDolor}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Localización del dolor:</label>
+                            <input type="text" name="localizacionDolor" class="form-control" placeholder="Localización del dolor"
+                                value="{{localizacionDolor}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- 3- Datos Nutricionales (Alimentos líquidos y electrolitos) -->
+                <div class="card mb-3">
+                    <div class="card-header">3- Datos Nutricionales (Alimentos liquidos y electrolitos)</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos Nutricionales (Alimentos liquidos y electrolitos) -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Peso:</label>
+                            <input type="number" name="peso" class="form-control w-auto" placeholder="Peso" value="{{peso}}" min="1" max="200"
+                                step="1"><span>kg.</span>
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Talla:</label>
+                            <input type="number" name="talla" class="form-control w-auto" placeholder="Talla" value="{{talla}}" min="10" max="250"
+                                step="1"><span>cm.</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Obesidad:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="obesidad" id="obesidadSi"
+                                    value="Si" {{#ifCond obesidad '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="obesidadSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="obesidad" id="obesidadNo"
+                                    value="No" {{#ifCond obesidad '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="obesidadNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Hidratación:</label>
+                            <input type="text" name="hidratacion" class="form-control" placeholder="Hidratación"
+                                value="{{hidratacion}}">
+                        </div>                        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Signo del pliegue:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="signoPliegue" id="signoPlieguePositivo"
+                                    value="Positivo" {{#ifCond signoPliegue '===' 'Positivo' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="signoPlieguePositivo">
+                                    Positivo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="signoPliegue" id="signoPliegueNegativo"
+                                    value="Negativo" {{#ifCond signoPliegue '===' 'Negativo' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="signoPliegueNegativo">
+                                    Negativo
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Autonomía para alimentarse:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="autonomiaParaAlimentarse" id="autonomiaParaAlimentarseTotal"
+                                    value="Total" {{#ifCond autonomiaParaAlimentarse '===' 'Total' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="autonomiaParaAlimentarseTotal">
+                                    Total
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="autonomiaParaAlimentarse" id="autonomiaParaAlimentarseParcial"
+                                    value="Parcial" {{#ifCond autonomiaParaAlimentarse '===' 'Parcial' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="autonomiaParaAlimentarseParcial">
+                                    Parcial
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="autonomiaParaAlimentarse" id="autonomiaParaAlimentarseNinguna"
+                                    value="Ninguna" {{#ifCond autonomiaParaAlimentarse '===' 'Ninguna' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="autonomiaParaAlimentarseNinguna">
+                                    Ninguna
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Alimentación:</label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">    
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="alimentacionEnteralOral"
+                                    id="alimentacionEnteralOral" value="true" {{#if alimentacionEnteralOral}}checked{{/if}}>
+                                <label class="form-check-label" for="alimentacionEnteralOral">
+                                    Enteral Oral
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="alimentacionEnteralSNG" id="alimentacionEnteralSNG"
+                                    value="true" {{#if alimentacionEnteralSNG}}checked{{/if}}>
+                                <label class="form-check-label" for="alimentacionEnteralSNG">
+                                    Enteral SNG
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ingresos vía oral:</label>
+                            <input type="number" name="ingresosViaOral" class="form-control w-auto" placeholder="Ingresos vía oral" value="{{ingresosViaOral}}"
+                                min="0" max="10000" step="1"><span>ml.</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ingresos vía parenteral:</label>
+                            <input type="number" name="ingresosViaParenteral" class="form-control w-auto" placeholder="Ingresos vía parenteral" value="{{ingresosViaParenteral}}"
+                                min="0" max="10000" step="1"><span>ml.</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 4- Datos de Eliminación -->
+                <div class="card mb-3">
+                    <div class="card-header">4- Datos de Eliminación</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Eliminación  -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ruidos hidroaéreos:</label>
+                            <input type="text" name="ruidosHidroaereos" class="form-control" placeholder="Ruidos hidroaéreos"
+                                value="{{ruidosHidroaereos}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Distensión abdominal:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="distencionAbdominal" id="distencionAbdominalSi"
+                                    value="Si" {{#ifCond distencionAbdominal '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="distencionAbdominalSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="distencionAbdominal" id="distencionAbdominalNo"
+                                    value="No" {{#ifCond distencionAbdominal '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="distencionAbdominalNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Color de las deposiciones:</label>
+                            <input type="text" name="colorDeposiciones" class="form-control" placeholder="Color de las deposiciones"
+                                value="{{colorDeposiciones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Consistencia de las deposiciones:</label>
+                            <input type="text" name="consistenciaDeposiciones" class="form-control" placeholder="Consistencia de las deposiciones"
+                                value="{{consistenciaDeposiciones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Otras características de las deposiciones:</label>
+                            <input type="text" name="otrasCaracteristicasDeposiciones" class="form-control" placeholder="Otras características de las deposiciones"
+                                value="{{otrasCaracteristicasDeposiciones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Sudoración:</label>
+                            <input type="text" name="sudoracion" class="form-control" placeholder="Sudoración"
+                                value="{{sudoracion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Total egresos sudoración:</label>
+                            <input type="number" name="totalEgresosSudoracion" class="form-control w-auto" placeholder="Total egresos sudoración" value="{{totalEgresosSudoracion}}"
+                                min="0" max="10000" step="1"><span>ml.</span>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Pérdida insensible sudoración:</label>
+                            <input type="number" name="perdidaInsensibleSudoracion" class="form-control w-auto" placeholder="Pérdida insensible sudoración" value="{{perdidaInsensibleSudoracion}}"
+                                min="0" max="10000" step="1"><span>ml.</span>
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Total ingresos balance hídrico:</label>
+                            <input type="number" name="totalIngresosBalanceHidrico" class="form-control w-auto" placeholder="Total ingresos balance hídrico" value="{{totalIngresosBalanceHidrico}}"
+                                min="0" max="10000" step="1"><span>ml.</span>
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Total egresos balance hídrico:</label>
+                            <input type="number" name="totalEgresosBalanceHidrico" class="form-control w-auto" placeholder="Total egresos balance hídrico" value="{{totalEgresosBalanceHidrico}}"
+                                min="0" max="10000" step="1"><span>ml.</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 5- Datos de Aseo y valoración de piel -->
+                <div class="card mb-3">
+                    <div class="card-header">5- Datos de Aseo y valoración de piel</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Aseo y valoración de piel -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Lesiones:</label>
+                            <input type="text" name="lesiones" class="form-control" placeholder="Lesiones"
+                                value="{{lesiones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Localización de las lesiones:</label>
+                            <input type="text" name="localizacionLesiones" class="form-control" placeholder="Localización de las lesiones"
+                                value="{{localizacionLesiones}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Cicatrices:</label>
+                            <input type="text" name="cicatrices" class="form-control" placeholder="Cicatrices"
+                                value="{{cicatrices}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Localización de las cicatrices:</label>
+                            <input type="text" name="localizacionCicatrices" class="form-control" placeholder="Localización de las cicatrices"
+                                value="{{localizacionCicatrices}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Dispone de:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mudaDeRopa"
+                                    id="mudaDeRopa" value="true" {{#if mudaDeRopa}}checked{{/if}}>
+                                <label class="form-check-label" for="mudaDeRopa">
+                                    Muda de ropa
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="elementosDeHigiene" id="elementosDeHigiene"
+                                    value="true" {{#if elementosDeHigiene}}checked{{/if}}>
+                                <label class="form-check-label" for="elementosDeHigiene">
+                                    Elementos de higiene
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Puede realizar higiene por sí mismo:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="higienePorSiMismo" id="higienePorSiMismoSi"
+                                    value="Si" {{#ifCond higienePorSiMismo '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="higienePorSiMismoSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="higienePorSiMismo" id="higienePorSiMismoNo"
+                                    value="No" {{#ifCond higienePorSiMismo '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="higienePorSiMismoNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 6- Datos de reposo y sueño -->
+                <div class="card mb-3">
+                    <div class="card-header">6- Datos de reposo y sueño</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de reposo y sueño -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Posición en cama:</label>
+                            <input type="text" name="posicionEnCama" class="form-control" placeholder="Posición en cama"
+                                value="{{posicionEnCama}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Hábitos de descanso nocturno:</label>
+                            <input type="text" name="habitosDescansoNocturno" class="form-control" placeholder="Hábitos de descanso nocturno"
+                                value="{{habitosDescansoNocturno}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Horas:</label>
+                            <input type="number" name="horas" class="form-control w-auto" placeholder="Horas" value="{{horas}}" step="1">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Alteración del sueño:</label>
+                            <input type="text" name="alteracionSuenio" class="form-control" placeholder="Alteración del sueño"
+                                value="{{alteracionSuenio}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Sedantes:</label>
+                            <input type="text" name="sedantes" class="form-control" placeholder="Sedantes"
+                                value="{{sedantes}}">
+                        </div>
+                    </div>
+                </div>
+                <!-- 7- Datos psicosociales -->
+                <div class="card mb-3">
+                    <div class="card-header">7- Datos psicosociales</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos psicosociales -->
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Estado de paciente:</label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoMiedo"
+                                    id="estadoMiedo" value="true" {{#if estadoMiedo}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoMiedo">
+                                    Miedo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoNegativismo"
+                                    id="estadoNegativismo" value="true" {{#if estadoNegativismo}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoNegativismo">
+                                    Negativismo
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoInquietud"
+                                    id="estadoInquietud" value="true" {{#if estadoInquietud}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoInquietud">
+                                    Inquietud
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">   
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoDepresion"
+                                    id="estadoDepresion" value="true" {{#if estadoDepresion}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoDepresion">
+                                    Depresión
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoApatia"
+                                    id="estadoApatia" value="true" {{#if estadoApatia}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoApatia">
+                                    Apatía
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoAnsiedad"
+                                    id="estadoAnsiedad" value="true" {{#if estadoAnsiedad}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoAnsiedad">
+                                    Ansiedad
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">   
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoAgresividad"
+                                    id="estadoAgresividad" value="true" {{#if estadoAgresividad}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoAgresividad">
+                                    Agresividad
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="estadoLlanto"
+                                    id="estadoLlanto" value="true" {{#if estadoLlanto}}checked{{/if}}>
+                                <label class="form-check-label" for="estadoLlanto">
+                                    Llanto
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Creencias religiosas:</label>
+                            <input type="text" name="creenciasReligion" class="form-control" placeholder="Creencias religiosas"
+                                value="{{creenciasReligion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Trabaja actualmente?:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="trabajaActualmente" id="trabajaActualmenteSi"
+                                    value="Si" {{#ifCond trabajaActualmente '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="trabajaActualmenteSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="trabajaActualmente" id="trabajaActualmenteNo"
+                                    value="No" {{#ifCond trabajaActualmente '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="trabajaActualmenteNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Ocupación:</label>
+                            <input type="text" name="ocupacion" class="form-control" placeholder="Ocupación"
+                                value="{{ocupacion}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Desde cuándo trabaja?:</label>
+                            <input type="text" name="desdeCuandoTrabaja" class="form-control" placeholder="Desde cuándo trabaja"
+                                value="{{desdeCuandoTrabaja}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Cómo se siente en el trabajo?:</label>
+                            <input type="text" name="sentimientoEnTrabajo" class="form-control" placeholder="Sentimiento en el trabajo"
+                                value="{{sentimientoEnTrabajo}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Escolaridad: </label>
+                            <select name="escolaridad" class="form-control w-auto">
+                                {{#if escolaridad}}
+                                <option value="Incompleta" {{#ifCond escolaridad '===' 'Incompleta'
+                                    }}selected{{/ifCond}}>Incompleta</option>
+                                <option value="Primaria" {{#ifCond escolaridad '===' 'Primaria'
+                                    }}selected{{/ifCond}}>Primaria</option>
+                                <option value="Secundaria" {{#ifCond escolaridad '===' 'Secundaria'
+                                    }}selected{{/ifCond}}>Secundaria</option>
+                                <option value="Terciaria" {{#ifCond escolaridad '===' 'Terciaria'
+                                    }}selected{{/ifCond}}>Terciaria</option>
+                                <option value="Universitaria" {{#ifCond escolaridad '===' 'Universitaria'
+                                    }}selected{{/ifCond}}>Universitaria</option>
+                                {{else}}
+                                <option value="" selected disabled hidden>Seleccione una opción</option>
+                                <option value="Incompleta">Incompleta</option>
+                                <option value="Primaria">Primaria</option>
+                                <option value="Secundaria">Secundaria</option>
+                                <option value="Terciaria">Terciaria</option>
+                                <option value="Universitaria">Universitaria</option>
+                                {{/if}}
+                            </select>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-left">
+                            <label class="mb-0 mr-2">Aprendizaje: </label>
+                        </div>
+                        <div class="form-group d-flex align-items-center justify-content-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aprendizajeDeseaAprender"
+                                    id="aprendizajeDeseaAprender" value="true" {{#if aprendizajeDeseaAprender}}checked{{/if}}>
+                                <label class="form-check-label" for="aprendizajeDeseaAprender">
+                                    Desea aprender su enfermedad
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aprendizajeNegacionAlTratamiento"
+                                    id="aprendizajeNegacionAlTratamiento" value="true" {{#if aprendizajeNegacionAlTratamiento}}checked{{/if}}>
+                                <label class="form-check-label" for="aprendizajeNegacionAlTratamiento">
+                                    Se niega al tratamiento
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="aprendizajeAceptacionAlTratamiento"
+                                    id="aprendizajeAceptacionAlTratamiento" value="true" {{#if aprendizajeAceptacionAlTratamiento}}checked{{/if}}>
+                                <label class="form-check-label" for="aprendizajeAceptacionAlTratamiento">
+                                    Lo acepta
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 8- Factores de riesgo -->
+                <div class="card mb-3">
+                    <div class="card-header">8- Factores de riesgo</div>
+                    <div class="card-body">
+                        <!-- Campos de Datos de Factores de riesgo -->
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Tabaquismo:</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tabaquismo" id="tabaquismoSi"
+                                    value="Si" {{#ifCond tabaquismo '===' 'Si' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="tabaquismoSi">
+                                    Si
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tabaquismo" id="tabaquismoNo"
+                                    value="No" {{#ifCond tabaquismo '===' 'No' }}checked{{/ifCond}}>
+                                <label class="form-check-label" for="tabaquismoNo">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">¿Cuántos cigarrillos fuma al día?:</label>
+                            <input type="number" name="tabaquismoCuantos" class="form-control w-auto" placeholder="¿Cuántos cigarrillos fuma al día?" value="{{tabaquismoCuantos}}" min="0" max="10000" step="1">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Consumo de alcohol:</label>
+                            <input type="text" name="consumoAlcohol" class="form-control" placeholder="Consumo de alcohol"
+                                value="{{consumoAlcohol}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Enfermedades preexistentes:</label>
+                            <input type="text" name="enfermedadesPreexistentes" class="form-control" placeholder="Enfermedades preexistentes"
+                                value="{{enfermedadesPreexistentes}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Motivo de fallecimiento de los padres:</label>
+                            <input type="text" name="motivoFallecimientoPadres" class="form-control" placeholder="Motivo de fallecimiento de los padres"
+                                value="{{motivoFallecimientoPadres}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Motivo de fallecimiento de los hermanos:</label>
+                            <input type="text" name="motivoFallecimientoHermanos" class="form-control" placeholder="Motivo de fallecimiento de los hermanos"
+                                value="{{motivoFallecimientoHermanos}}">
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label class="mb-0 mr-2">Motivo de fallecimiento de los abuelos:</label>
+                            <input type="text" name="motivoFallecimientoAbuelos" class="form-control" placeholder="Motivo de fallecimiento de los abuelos"
+                                value="{{motivoFallecimientoAbuelos}}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón Guardar -->
+                <div class="form-group d-flex align-items-center">
+                    <button class="btn btn-primary btn-block" type="submit">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </card>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const serviceSelect = document.getElementById('servicio'); // Usa 'servicio' aquí
+        const serviceNameInput = document.getElementById('servicioNombre'); // Obtén el campo oculto
+        const bedSelect = document.getElementById('bedSelect');
+        const beds = {{{ json beds }}};
+        const aperturaOcularSelect = document.getElementById('aperturaOcular');
+        const respuestaMotoraSelect = document.getElementById('respuestaMotora');
+        const respuestaVerbalSelect = document.getElementById('respuestaVerbal');
+        const totalSumaElement = document.getElementById('totalSuma');
+
+        // Función para actualizar las opciones de cama
+        function actualizarCamas() {
+            const selectedService = serviceSelect.value;
+            const selectedServiceName = serviceSelect.options[serviceSelect.selectedIndex].getAttribute('data-name');
+            serviceNameInput.value = selectedServiceName;
+
+            // Limpia las opciones de cama existentes
+            bedSelect.innerHTML = '';
+
+            if (selectedService) {
+                // Filtra las camas según el servicio y el estado solo si se ha seleccionado un servicio
+                const filteredBeds = beds.filter(bed => bed.servicio.toString() === selectedService && bed.estado === 'Disponible');
+
+                if (filteredBeds.length === 0) {
+                    // Si no hay camas disponibles, agrega una opción que lo indique
+                    const optionNoDisponible = document.createElement('option');
+                    optionNoDisponible.value = '';
+                    optionNoDisponible.text = 'No hay camas disponibles';
+                    bedSelect.appendChild(optionNoDisponible);
+                    bedSelect.disabled = true; // Deshabilita la lista de camas
+                } else {
+                    // Agrega las nuevas opciones de cama disponibles
+                    filteredBeds.forEach(bed => {
+                        const option = document.createElement('option');
+                        option.value = bed.numeroCama;
+                        option.text = bed.numeroCama;
+                        bedSelect.appendChild(option);
+                    });
+
+                    // Habilita la lista de camas
+                    bedSelect.disabled = false;
+                }
+            } else {
+                // Si no se ha seleccionado un servicio, deshabilita la lista de camas
+                bedSelect.disabled = true;
+            }
+        }
+
+        // Función para actualizar la suma
+        function updateSum() {
+            const aperturaOcularValue = parseInt(aperturaOcularSelect.value) || 0;
+            const respuestaMotoraValue = parseInt(respuestaMotoraSelect.value) || 0;
+            const respuestaVerbalValue = parseInt(respuestaVerbalSelect.value) || 0;
+            const totalSuma = aperturaOcularValue + respuestaMotoraValue + respuestaVerbalValue;
+            totalSumaElement.textContent = totalSuma;
+        }
+
+        // Event listeners para cambios en los select
+        aperturaOcularSelect.addEventListener('change', updateSum);
+        respuestaMotoraSelect.addEventListener('change', updateSum);
+        respuestaVerbalSelect.addEventListener('change', updateSum);
+        
+        serviceSelect.addEventListener('change', function () {
+            // Elimina la opción "Selecciona un servicio" una vez que se ha seleccionado un servicio
+            const defaultOption = this.querySelector('option[value=""]');
+            if (defaultOption) {
+                defaultOption.remove();
+            }
+            // Actualiza el valor del campo oculto antes de llamar a actualizarCamas
+            const selectedService = serviceSelect.value;
+            const selectedServiceName = serviceSelect.options[serviceSelect.selectedIndex].getAttribute('data-name');
+            serviceNameInput.value = selectedServiceName;
+
+            /*actualizarCamas();
+            updateSum();*/
+            if (selectedService) {
+                // Si se seleccionó un servicio, habilita el select de camas y actualiza las camas
+                bedSelect.disabled = false;
+                actualizarCamas();
+                updateSum();
+            } else {
+                // Si no se seleccionó un servicio, deshabilita el select de camas
+                bedSelect.disabled = true;
+            }
+        });
+
+
+
+        // Establece el valor seleccionado para numeroCama
+        bedSelect.value = '{{numeroCama}}'; // Asegúrate de que la variable 'numeroCama' esté disponible en tu entorno de renderización      
+        
+        // Nuevo código para manejar la habilitación/deshabilitación del campo tabaquismoCuantos
+        const tabaquismoSiRadio = document.getElementById('tabaquismoSi');
+        const tabaquismoNoRadio = document.getElementById('tabaquismoNo');
+        const tabaquismoCuantosInput = document.querySelector('input[name="tabaquismoCuantos"]');
+
+        // Manejar el cambio en los botones de radio de tabaquismo
+        function handleTabaquismoChange() {
+            if (tabaquismoSiRadio.checked) {
+                tabaquismoCuantosInput.disabled = false;
+            } else {
+                tabaquismoCuantosInput.value = 0;
+                tabaquismoCuantosInput.disabled = true;
+            }
+        }
+        // Event listeners para cambios en los botones de radio de tabaquismo
+        tabaquismoSiRadio.addEventListener('change', handleTabaquismoChange);
+        tabaquismoNoRadio.addEventListener('change', handleTabaquismoChange);
+
+        // Llamada inicial para configurar el estado del campo tabaquismoCuantos al cargar la página
+        handleTabaquismoChange();                
+    });
+
+document.querySelector('form').addEventListener('submit', (event) => {
+    if (document.getElementById('tabaquismoNo').checked) {
+        document.querySelector('input[name="tabaquismoCuantos"]').value = '';
+    }
+});
+
+function formatDate(date) {
+    let fechaHora = new Date(date);
+
+    // Obtienes la fecha en formato yyyy-mm-dd
+    let fecha = fechaHora.getFullYear() + '-' + ('0' + (fechaHora.getMonth() + 1)).slice(-2) + '-' + ('0' + fechaHora.getDate()).slice(-2);
+    return fecha;
+}
+
+//♥Para que si completa dni se cargue automaticamente el paciente
+document.querySelector('input[name="dni"]').addEventListener('change', function() {
+    const dni = this.value;
+    fetch(`/paciente/${dni}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No se encontró la valoración');
+                servicio.disabled = false;
+                actualizarCamas();
+            }
+            return response.json();
+        })
+        .then(valoration => {
+
+            let numeroCamaInput = document.querySelector('select[name="numeroCama"]');
+            numeroCamaInput.disabled = false;
+            
+            // Completa automáticamente los campos del formulario con los datos del paciente si es que existe
+            let apellidoInput = document.querySelector('input[name="apellido"]');
+            apellidoInput.value = valoration.paciente.apellido;
+            apellidoInput.readOnly = true;
+
+            let nombreInput = document.querySelector('input[name="nombre"]');
+            nombreInput.value = valoration.paciente.nombre;
+            nombreInput.readOnly = true;
+
+            let fechaNacimientoInput = document.querySelector('input[name="fechaNacimiento"]');
+            fechaNacimientoInput.value = formatDate(valoration.paciente.fechaNacimiento);
+            fechaNacimientoInput.readOnly = true;
+
+            let sexo = valoration.paciente.sexo;
+            if (sexo === 'Masculino') {
+                document.querySelector('input[name="sexo"][value="Masculino"]').checked = true;
+                document.querySelector('input[name="sexo"][value="Masculino"]').disabled = true;
+                document.querySelector('input[name="sexo"][value="Femenino"]').disabled = true;
+                // Agrega un campo de entrada oculto
+                let sexoHiddenInput = document.createElement('input');
+                sexoHiddenInput.type = 'hidden';
+                sexoHiddenInput.name = 'sexo';
+                sexoHiddenInput.value = 'Masculino';
+                document.querySelector('form').appendChild(sexoHiddenInput);
+            } else if (sexo === 'Femenino') {
+                document.querySelector('input[name="sexo"][value="Femenino"]').checked = true;
+                document.querySelector('input[name="sexo"][value="Femenino"]').disabled = true;
+                document.querySelector('input[name="sexo"][value="Masculino"]').disabled = true;
+                // Agrega un campo de entrada oculto
+                let sexoHiddenInput = document.createElement('input');
+                sexoHiddenInput.type = 'hidden';
+                sexoHiddenInput.name = 'sexo';
+                sexoHiddenInput.value = 'Femenino';
+                document.querySelector('form').appendChild(sexoHiddenInput);
+            }
+
+            let estadoCivilInput = document.querySelector('input[name="estadoCivil"]');
+            estadoCivilInput.value = valoration.paciente.estadoCivil;
+            estadoCivilInput.readOnly = true;
+
+            let domicilioActualInput = document.querySelector('input[name="domicilioActual"]');
+            domicilioActualInput.value = valoration.paciente.domicilioActual;
+            domicilioActualInput.readOnly = true;
+
+            let coberturaSaludInput = document.querySelector('input[name="coberturaSalud"]');
+            coberturaSaludInput.value = valoration.paciente.coberturaSalud;
+            coberturaSaludInput.readOnly = true;
+
+            let nacionalidadInput = document.querySelector('input[name="nacionalidad"]');
+            nacionalidadInput.value = valoration.paciente.nacionalidad;
+            nacionalidadInput.readOnly = true;
+
+            let procedenciaInput = document.querySelector('input[name="procedencia"]');
+            procedenciaInput.value = valoration.paciente.procedencia;
+            procedenciaInput.readOnly = true;
+
+            // Verificar si fechaYHoraAltaPaciente es null es decir verifica si el Paciente no fue dado de alta
+            if (valoration.ingreso.fechaYHoraAltaPaciente === null) {
+                let motivoIngresoInput = document.querySelector('input[name="motivoIngreso"]');
+                motivoIngresoInput.value = valoration.ingreso.motivoIngreso;
+                motivoIngresoInput.readOnly = true;
+
+                let servicioId = valoration.ingreso.cama.servicio._id;
+                let servicioInput = document.querySelector('select[name="servicio"]');
+                servicioInput.value = servicioId;
+                servicioInput.disabled = true;
+
+                // Agrega un campo de entrada oculto para 'servicio'
+                let servicioHiddenInput = document.createElement('input');
+                servicioHiddenInput.type = 'hidden';
+                servicioHiddenInput.name = 'servicio';
+                servicioHiddenInput.value = servicioId;
+                document.querySelector('form').appendChild(servicioHiddenInput);
+
+                // Parsea la cadena JSON para obtener el array 'bedsFromJson'
+                let bedsFromJson = JSON.parse(document.querySelector('#bedsJson').textContent);
+
+                // Para el campo 'numeroCama'
+                let numeroCamaId = valoration.ingreso.cama._id;
+                console.log('numeroCamaId:', numeroCamaId);
+
+                // Busca en el array 'bedsFromJson' la cama con el ID correspondiente
+                let camaCorrespondiente = bedsFromJson.find(cama => cama._id === numeroCamaId);
+                console.log('camaCorrespondiente:', camaCorrespondiente);
+
+                // Si se encontró la cama, obtén su número
+                let numeroCama = camaCorrespondiente ? camaCorrespondiente.numeroCama : null;
+                console.log('numeroCama:', numeroCama);
+
+                let numeroCamaInput = document.querySelector('select[name="numeroCama"]');
+                console.log('numeroCamaInput:', numeroCamaInput);
+
+                // Establece el valor del 'select' al número de la cama (como una cadena)
+                numeroCamaInput.value = numeroCama.toString();
+                console.log('numeroCamaInput.value:', numeroCamaInput.value);
+                numeroCamaInput.disabled = true;
+
+                // Agrega un campo de entrada oculto para 'numeroCama'
+                let numeroCamaHiddenInput = document.createElement('input');
+                numeroCamaHiddenInput.type = 'hidden';
+                numeroCamaHiddenInput.name = 'numeroCama';
+                numeroCamaHiddenInput.value = numeroCama;
+                document.querySelector('form').appendChild(numeroCamaHiddenInput);
+
+                let tipoIngreso = valoration.ingreso.tipoIngreso;
+                if (tipoIngreso === 'Programado') {
+                    document.querySelector('input[name="tipoIngreso"][value="Programado"]').checked = true;
+                    document.querySelector('input[name="tipoIngreso"][value="Programado"]').disabled = true;
+                    document.querySelector('input[name="tipoIngreso"][value="Urgencia"]').disabled = true;
+
+                    // Agrega un campo de entrada oculto
+                    let tipoIngresoHiddenInput = document.createElement('input');
+                    tipoIngresoHiddenInput.type = 'hidden';
+                    tipoIngresoHiddenInput.name = 'tipoIngreso';
+                    tipoIngresoHiddenInput.value = 'Programado';
+                    document.querySelector('form').appendChild(tipoIngresoHiddenInput);
+
+                } else if (tipoIngreso === 'Urgencia') {
+                    document.querySelector('input[name="tipoIngreso"][value="Urgencia"]').checked = true;                
+                    document.querySelector('input[name="tipoIngreso"][value="Urgencia"]').disabled = true;
+                    document.querySelector('input[name="tipoIngreso"][value="Programado"]').disabled = true;
+
+                    // Agrega un campo de entrada oculto
+                    let tipoIngresoHiddenInput = document.createElement('input');
+                    tipoIngresoHiddenInput.type = 'hidden';
+                    tipoIngresoHiddenInput.name = 'tipoIngreso';
+                    tipoIngresoHiddenInput.value = 'Urgencia';
+                    document.querySelector('form').appendChild(tipoIngresoHiddenInput);                       
+                }
+        
+                //diagnostico lo recupero pero puede cambiar asi que lo habilito
+                let diagnosticoInput = document.querySelector('input[name="diagnostico"]');
+                diagnosticoInput.value = valoration.diagnostico;
+                diagnosticoInput.readOnly = false;
+
+                
+                //Antecedentes
+                // Antecedente Alergias
+                //No me está funcionando correctamente la recuperacion de los boolean para cargar en checkbox, por so lo deshabilité
+                /*let antecedenteAlergiasInput = document.querySelector('input[name="antecedenteAlergias"]');
+                let antecedenteAlergiasHiddenInput = document.createElement('input');
+                antecedenteAlergiasHiddenInput.type = 'hidden';
+                antecedenteAlergiasHiddenInput.name = 'antecedenteAlergias';
+                if (typeof valoration.otrosProblemas.antecedenteAlergias === 'boolean') {
+                    antecedenteAlergiasInput.checked = valoration.otrosProblemas.antecedenteAlergias;
+                    antecedenteAlergiasHiddenInput.value = valoration.otrosProblemas.antecedenteAlergias;
+                } else {
+                    antecedenteAlergiasInput.checked = false; // o cualquier otro valor predeterminado
+                    antecedenteAlergiasHiddenInput.value = false; // o cualquier otro valor predeterminado
+                }
+                antecedenteAlergiasInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteAlergiasHiddenInput);
+
+                // Antecedente Dbt
+                let antecedenteDbtInput = document.querySelector('input[name="antecedenteDbt"]');
+                let antecedenteDbtHiddenInput = document.createElement('input');
+                antecedenteDbtHiddenInput.type = 'hidden';
+                antecedenteDbtHiddenInput.name = 'antecedenteDbt';
+                if (typeof valoration.otrosProblemas.antecedenteDbt === 'boolean') {
+                    antecedenteDbtInput.checked = valoration.otrosProblemas.antecedenteDbt;
+                    antecedenteDbtHiddenInput.value = valoration.otrosProblemas.antecedenteDbt;
+                } else {
+                    antecedenteDbtInput.checked = false;
+                    antecedenteDbtHiddenInput.value = false;
+                }
+                antecedenteDbtInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteDbtHiddenInput);
+
+                // Antecedente Hta
+                let antecedenteHtaInput = document.querySelector('input[name="antecedenteHta"]');
+                let antecedenteHtaHiddenInput = document.createElement('input');
+                antecedenteHtaHiddenInput.type = 'hidden';
+                antecedenteHtaHiddenInput.name = 'antecedenteHta';
+                if (typeof valoration.otrosProblemas.antecedenteHta === 'boolean') {
+                    antecedenteHtaInput.checked = valoration.otrosProblemas.antecedenteHta;
+                    antecedenteHtaHiddenInput.value = valoration.otrosProblemas.antecedenteHta;
+                } else {
+                    antecedenteHtaInput.checked = false;
+                    antecedenteHtaHiddenInput.value = false;
+                }
+                antecedenteHtaInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteHtaHiddenInput);
+              
+                // Antecedente Obesidad
+                let antecedenteObesidadInput = document.querySelector('input[name="antecedenteObesidad"]');
+                let antecedenteObesidadHiddenInput = document.createElement('input');
+                antecedenteObesidadHiddenInput.type = 'hidden';
+                antecedenteObesidadHiddenInput.name = 'antecedenteObesidad';
+                if (typeof valoration.otrosProblemas.antecedenteObesidad === 'boolean') {
+                    antecedenteObesidadInput.checked = valoration.otrosProblemas.antecedenteObesidad;
+                    antecedenteObesidadHiddenInput.value = valoration.otrosProblemas.antecedenteObesidad;
+                } else {
+                    antecedenteObesidadInput.checked = false;
+                    antecedenteObesidadHiddenInput.value = false;
+                }
+                antecedenteObesidadInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteObesidadHiddenInput);
+
+                // Antecedente Chagas
+                let antecedenteChagasInput = document.querySelector('input[name="antecedenteChagas"]');
+                let antecedenteChagasHiddenInput = document.createElement('input');
+                antecedenteChagasHiddenInput.type = 'hidden';
+                antecedenteChagasHiddenInput.name = 'antecedenteChagas';
+                if (typeof valoration.otrosProblemas.antecedenteChagas === 'boolean') {
+                    antecedenteChagasInput.checked = valoration.otrosProblemas.antecedenteChagas;
+                    antecedenteChagasHiddenInput.value = valoration.otrosProblemas.antecedenteChagas;
+                } else {
+                    antecedenteChagasInput.checked = false;
+                    antecedenteChagasHiddenInput.value = false;
+                }
+                antecedenteChagasInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteChagasHiddenInput);
+
+                // Antecedente Irregularidad Ciclo Menstrual
+                let antecedenteIrregularidadCicloMenstrualInput = document.querySelector('input[name="antecedenteIrregularidadCicloMenstrual"]');
+                let antecedenteIrregularidadCicloMenstrualHiddenInput = document.createElement('input');
+                antecedenteIrregularidadCicloMenstrualHiddenInput.type = 'hidden';
+                antecedenteIrregularidadCicloMenstrualHiddenInput.name = 'antecedenteIrregularidadCicloMenstrual';
+                if (typeof valoration.otrosProblemas.antecedenteIrregularidadCicloMenstrual === 'boolean') {
+                    antecedenteIrregularidadCicloMenstrualInput.checked = valoration.otrosProblemas.antecedenteIrregularidadCicloMenstrual;
+                    antecedenteIrregularidadCicloMenstrualHiddenInput.value = valoration.otrosProblemas.antecedenteIrregularidadCicloMenstrual;
+                } else {
+                    antecedenteIrregularidadCicloMenstrualInput.checked = false;
+                    antecedenteIrregularidadCicloMenstrualHiddenInput.value = false;
+                }
+                antecedenteIrregularidadCicloMenstrualInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteIrregularidadCicloMenstrualHiddenInput);
+
+                // Antecedente Asma
+                let antecedenteAsmaInput = document.querySelector('input[name="antecedenteAsma"]');
+                let antecedenteAsmaHiddenInput = document.createElement('input');
+                antecedenteAsmaHiddenInput.type = 'hidden';
+                antecedenteAsmaHiddenInput.name = 'antecedenteAsma';
+                if (typeof valoration.otrosProblemas.antecedenteAsma === 'boolean') {
+                    antecedenteAsmaInput.checked = valoration.otrosProblemas.antecedenteAsma;
+                    antecedenteAsmaHiddenInput.value = valoration.otrosProblemas.antecedenteAsma;
+                } else {
+                    antecedenteAsmaInput.checked = false;
+                    antecedenteAsmaHiddenInput.value = false;
+                }
+                antecedenteAsmaInput.disabled = true;
+                document.querySelector('form').appendChild(antecedenteAsmaHiddenInput);
+
+                let descripcionInput = document.querySelector('input[name="descripcion"]');
+                descripcionInput.value = valoration.indicaciones.descripcion;
+                descripcionInput.readOnly = false;
+
+                let examenesComplementarios = valoration.indicaciones.examenesComplementarios;
+                if (examenesComplementarios === 'Si') {
+                    document.querySelector('input[name="examenesComplementarios"][value="Si"]').checked = true;
+                } else if (examenesComplementarios === 'No') {
+                    document.querySelector('input[name="examenesComplementarios"][value="No"]').checked = true;
+                }
+                document.querySelector('input[name="examenesComplementarios"][value="Si"]').readOnly = true;
+                document.querySelector('input[name="examenesComplementarios"][value="No"]').readOnly = true;
+
+                let otrosInput = document.querySelector('input[name="otros"]');
+                otrosInput.value = valoration.indicaciones.otros;
+                otrosInput.readOnly = false;*/
+
+            } else {
+                apellidoInput.readOnly = false;
+                nombreInput.readOnly = false;
+                if (valoration.paciente.fechaNacimiento === null || valoration.paciente.fechaNacimiento === "") {
+                    fechaNacimientoInput.readOnly = false;
+                    fechaNacimientoInput.disabled = false;
+                }
+                estadoCivilInput.readOnly = false;
+                domicilioActualInput.readOnly = false;
+                coberturaSaludInput.readOnly = false;
+
+                if (valoration.paciente.nacionalidad === null || valoration.paciente.nacionalidad === "") {
+                    nacionalidadInput.readOnly = false;
+                }
+
+                if (valoration.paciente.procedencia === null || valoration.paciente.procedencia === "") {
+                    procedenciaInput.readOnly = false;
+                }              
+            }
+        })
+        .catch(error => {
+            //Acá entra cuando no existe el DNI que ingresa el usuario, se limpian todos los campos para evitar que si antes ingresó un DNI de alguien que si existe y se cargaron los datos evitar entonces que esos datos sigan en el formulario
+            console.error('Error:', error);
+            // Limpiar los campos del formulario, sólo los que se pueden llegar a recuperar
+            document.querySelector('input[name="apellido"]').value = '';
+            document.querySelector('input[name="apellido"]').readOnly = false;
+
+            document.querySelector('input[name="nombre"]').value = '';
+            document.querySelector('input[name="nombre"]').readOnly = false;
+
+            document.querySelector('input[name="fechaNacimiento"]').value = '';
+            document.querySelector('input[name="fechaNacimiento"]').readOnly = false;
+
+            document.querySelector('input[name="sexo"][value="Masculino"]').checked = false;
+            document.querySelector('input[name="sexo"][value="Masculino"]').disabled = false;
+            document.querySelector('input[name="sexo"][value="Femenino"]').checked = false;
+            document.querySelector('input[name="sexo"][value="Femenino"]').disabled = false;
+
+            document.querySelector('input[name="estadoCivil"]').value = '';
+            document.querySelector('input[name="estadoCivil"]').readOnly = false;
+
+            document.querySelector('input[name="domicilioActual"]').value = '';
+            document.querySelector('input[name="domicilioActual"]').readOnly = false;
+
+            document.querySelector('input[name="coberturaSalud"]').value = '';
+            document.querySelector('input[name="coberturaSalud"]').readOnly = false;
+
+            document.querySelector('input[name="nacionalidad"]').value = '';
+            document.querySelector('input[name="nacionalidad"]').readOnly = false;
+
+            document.querySelector('input[name="procedencia"]').value = '';
+            document.querySelector('input[name="procedencia"]').readOnly = false;
+
+            document.querySelector('input[name="motivoIngreso"]').value = '';
+            document.querySelector('input[name="motivoIngreso"]').readOnly = false;
+
+            document.querySelector('select[name="servicio"]').value = '';
+            document.querySelector('select[name="servicio"]').disabled = false;
+            servicio.disabled = false;
+
+            document.querySelector('select[name="numeroCama"]').value = '';
+            document.querySelector('select[name="numeroCama"]').disabled = true;
+
+            document.querySelector('input[name="tipoIngreso"][value="Programado"]').checked = false;
+            document.querySelector('input[name="tipoIngreso"][value="Programado"]').disabled = false;
+            document.querySelector('input[name="tipoIngreso"][value="Urgencia"]').checked = false;
+            document.querySelector('input[name="tipoIngreso"][value="Urgencia"]').disabled = false;
+
+            document.querySelector('input[name="diagnostico"]').value = '';
+            document.querySelector('input[name="diagnostico"]').readOnly = false;
+
+            document.querySelector('input[name="antecedenteAlergias"]').checked = false;
+            document.querySelector('input[name="antecedenteAlergias"]').disabled = false;
+
+            document.querySelector('input[name="antecedenteDbt"]').checked = false;
+            document.querySelector('input[name="antecedenteDbt"]').disabled = false;
+
+            document.querySelector('input[name="antecedenteHta"]').checked = false;
+            document.querySelector('input[name="antecedenteHta"]').disabled = false;
+
+            document.querySelector('input[name="antecedenteObesidad"]').checked = false;
+            document.querySelector('input[name="antecedenteObesidad"]').disabled = false;
+
+            document.querySelector('input[name="antecedenteChagas"]').checked = false;
+            document.querySelector('input[name="antecedenteChagas"]').disabled = false;
+
+            document.querySelector('input[name="antecedenteIrregularidadCicloMenstrual"]').checked = false;
+            document.querySelector('input[name="antecedenteIrregularidadCicloMenstrual"]').disabled = false;
+
+            document.querySelector('input[name="antecedenteAsma"]').checked = false;
+            document.querySelector('input[name="antecedenteAsma"]').disabled = false;
+
+            document.querySelector('input[name="descripcion"]').value = '';
+            document.querySelector('input[name="descripcion"]').readOnly = false;
+
+            document.querySelector('input[name="examenesComplementarios"][value="Si"]').checked = false;
+            document.querySelector('input[name="examenesComplementarios"][value="Si"]').disabled = false;
+            document.querySelector('input[name="examenesComplementarios"][value="No"]').checked = false;
+            document.querySelector('input[name="examenesComplementarios"][value="No"]').disabled = false;
+
+            document.querySelector('input[name="otros"]').value = '';
+            document.querySelector('input[name="otros"]').readOnly = false;
+
+            actualizarCamas();
+        });
+        // Llamada inicial para actualizar las camas al cargar la página
+        actualizarCamas();
+        updateSum();
+});
+</script>

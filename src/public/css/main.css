@@ -1,0 +1,70 @@
+body {
+    background: #1488CC;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #2B32B2, #1488CC);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #2B32B2, #1488CC);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+html, body {
+    height: 100%;
+}
+
+main {
+    flex-grow: 1;
+}
+
+.navbar {
+    background-color: rgb(14, 17, 62) !important;
+}
+
+.navbar .nav-link {
+    color: #ffffff !important;
+}
+
+.navbar .navbar-brand {
+    color: #ffffff !important;
+}
+
+.footer {
+    background-color: white;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    margin-top: auto;
+}
+
+.form-check { /*Para configurar los espacios de los radio buttons*/
+    margin-right: 25px;
+}
+.form-check-label {
+    margin-left: 0px;
+}
+.form-check-input { /*Para configurar la altura en la línea de los radio buttons*/
+    position: relative;
+    top: 2px;
+}
+
+.logosistema {
+    width: 50%;
+}
+
+.vertical-center {
+    vertical-align: middle !important;
+}
+
+input[readonly] {
+    background-color: #ccc;
+}
+
+.bg-yellow {
+    background-color: rgba(245, 245, 0, 0.697);
+}
+
+.bg-green {
+    background-color: rgba(7, 179, 7, 0.84);
+}

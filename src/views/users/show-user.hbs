@@ -1,0 +1,108 @@
+<div class="col-md-10 mx-auto mt-4">
+    <card class="card">
+        <div class="card-header">
+            <h3 class="text-center">Usuario</h3>
+        </div>
+        <div class="card-body">
+            <div>
+                <p class="text-center">
+                    <span style="margin-right: 10px;">Fecha de Creación: {{user.date}}</span> Hora: {{user.time}}
+                </p>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header">Datos del Usuario</div>
+                <div class="card-body">
+                    <!-- Campos de Datos del User -->
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Nombre:</label>
+                        <input type="text" class="form-control border-1 bg-transparent" name="nombre" placeholder="-"
+                            value="{{user.profesional.nombre}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Apellido:</label>
+                        <input type="text" class="form-control border-1 bg-transparent" name="apellido" placeholder="-"
+                            value="{{user.profesional.apellido}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">DNI:</label>
+                        <input type="number" class="form-control border-1 bg-transparent" name="dni" placeholder="-"
+                            value="{{user.profesional.dni}}" min="5000000" max="80000000" step="1" disabled>
+                    </div>
+                    <div class="form-group  d-flex align-items-center">
+                        <label class="mb-0 mr-2">Fecha de Nacimiento:</label>
+                        <input type="text" name="fechaNacimiento" class="form-control border-1 bg-transparent"
+                            placeholder="-" value="{{user.profesional.fechaNacimiento}}" style="width: min-content;" disabled>
+                    </div>
+
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Sexo:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sexo" id="masculino" value="Masculino"
+                                disabled {{#ifCond user.profesional.sexo '===' 'Masculino' }}checked{{/ifCond}}>
+                            <label class="form-check-label" for="masculino">
+                                Masculino
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="sexo" id="femenino" value="Femenino"
+                                disabled {{#ifCond user.profesional.sexo '===' 'Femenino' }}checked{{/ifCond}}>
+                            <label class="form-check-label" for="femenino">
+                                Femenino
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Domicilio:</label>
+                        <input type="text" class="form-control border-1 bg-transparent" name="domicilio" placeholder="-"
+                            value="{{user.profesional.domicilio}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Telefono Fijo:</label>
+                        <input type="number" class="form-control border-1 bg-transparent" name="numeroTelefonoFijo"
+                            placeholder="-" value="{{user.profesional.numeroTelefonoFijo}}" min="4100000" max="49999999" step="1">
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Celular:</label>
+                        <input type="number" class="form-control border-1 bg-transparent" name="numeroCelular" placeholder="-"
+                            value="{{user.profesional.numeroCelular}}" min="3884000000" max="3887999999" step="1" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Profesión:</label>
+                        <input type="text" class="form-control border-1 bg-transparent" name="profesion" placeholder="-"
+                            value="{{user.profesional.profesion}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Matrícula Profesional:</label>
+                        <input type="text" class="form-control border-1 bg-transparent" name="matriculaProfesional"
+                            placeholder="-" value="{{user.profesional.matriculaProfesional}}">
+                    </div>
+                    <!-- Que el estado por defecto sea Activo -->
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Nombre de Usuario:</label>
+                        <input type="text" class="form-control border-1 bg-transparent" name="nombreUsuario" placeholder="-"
+                            value="{{user.nombreUsuario}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Email:</label>
+                        <input type="email" class="form-control border-1 bg-transparent" name="email" placeholder="-" value="{{user.email}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Password:</label>
+                        <input type="password" class="form-control border-1 bg-transparent" name="password" placeholder="-"
+                            value="{{user.password}}" disabled>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="mb-0 mr-2">Rol de Usuario:</label>
+                        <select name="rolUsuario" class="form-control border-1 bg-transparent" style="width: min-content;" disabled>
+                            {{#if user.rolUsuario}}
+                                <option value="{{user.rolUsuario}}" selected>
+                                    {{user.rolUsuario}}
+                                </option>
+                            {{/if}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </card>
+</div>
