@@ -37,7 +37,9 @@
                             {{/if}}
                             
                             {{#if isLatest}} 
-                                <a href="/valorations/edit/{{_id}}"> <i class="fas fa-edit"></i> </a>
+                                {{#ifCond ingreso.estadoInternacion '===' 'No finalizada'}}
+                                    <a href="/valorations/edit/{{_id}}"> <i class="fas fa-edit"></i> </a>
+                                {{/ifCond}}
                             {{/if}}
 
                         </h4>
