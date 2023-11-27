@@ -415,15 +415,15 @@ router.post('/valorations/new-valoration', isAuthenticated, async (req, res) => 
                 throw new Error('Cama no encontrada');
             }
 
-// Buscar si existe una valoración para la misma cama con estadoInternacion igual a "No finalizada"
-const existingValoration = await Valoration.findOne({
-    'ingreso.cama': bed._id,
-    'ingreso.estadoInternacion': 'No finalizada'
-});
+            // Buscar si existe una valoración para la misma cama con estadoInternacion igual a "No finalizada"
+            const existingValoration = await Valoration.findOne({
+                'ingreso.cama': bed._id,
+                'ingreso.estadoInternacion': 'No finalizada'
+            });
 
-// Si existe tal valoración, guardar en fechaYHoraIngreso la misma fechaYHoraIngreso de la valoración existente
-// Si no existe tal valoración, guardar la fecha y hora del sistema en fechaYHoraIngreso
-let fechaYHoraIngreso = existingValoration ? existingValoration.ingreso.fechaYHoraIngreso : Date.now();
+            // Si existe tal valoración, guardar en fechaYHoraIngreso la misma fechaYHoraIngreso de la valoración existente
+            // Si no existe tal valoración, guardar la fecha y hora del sistema en fechaYHoraIngreso
+            let fechaYHoraIngreso = existingValoration ? existingValoration.ingreso.fechaYHoraIngreso : Date.now();
             const newValoration = new Valoration({
                 paciente: {
                     apellido,
