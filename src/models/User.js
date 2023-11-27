@@ -19,8 +19,6 @@ const UserSchema = new Schema({
         numeroCelular: { type: Number, required: true },
         profesion: { type: String, required: true },
         matriculaProfesional: { type: String, required: true },
-        //estado: { type: String, required: true, enum: ['Activo', 'Inactivo'], default: 'Activo' }
-        // otros campos...
     }
 });
 

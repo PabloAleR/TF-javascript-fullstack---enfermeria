@@ -11,7 +11,7 @@ const { isAuthenticated } = require('../helpers/auth');
 function formatDate(date) {
     let fechaHora = new Date(date);
 
-    // Obtienes la fecha en formato yyyy-mm-dd
+    // Obtiene la fecha en formato yyyy-mm-dd
     let fecha = fechaHora.getFullYear() + '-' + ('0' + (fechaHora.getMonth() + 1)).slice(-2) + '-' + ('0' + fechaHora.getDate()).slice(-2);
 
     return fecha;
@@ -393,7 +393,7 @@ router.post('/valorations/new-valoration', isAuthenticated, async (req, res) => 
     } else {
         let { fechaNacimiento } = req.body;
 
-        // Verificar si fechaNacimiento no está definido o es una cadena vacía y establecerlo a null
+        // Verifica si fechaNacimiento no está definido o es una cadena vacía y establecerlo a null
         if (fechaNacimiento === undefined || fechaNacimiento === '') {
             fechaNacimiento = null;
         }
@@ -405,7 +405,7 @@ router.post('/valorations/new-valoration', isAuthenticated, async (req, res) => 
         }
 
         try {
-            // Obtener la cama correspondiente usando el ObjectId del servicio
+            // Obtiene la cama correspondiente usando el ObjectId del servicio
             const bed = await Bed.findOne({ numeroCama, servicio }).populate('servicio');
 
             if (bed) {
@@ -424,7 +424,6 @@ const existingValoration = await Valoration.findOne({
 // Si existe tal valoración, guardar en fechaYHoraIngreso la misma fechaYHoraIngreso de la valoración existente
 // Si no existe tal valoración, guardar la fecha y hora del sistema en fechaYHoraIngreso
 let fechaYHoraIngreso = existingValoration ? existingValoration.ingreso.fechaYHoraIngreso : Date.now();
-
             const newValoration = new Valoration({
                 paciente: {
                     apellido,
@@ -442,7 +441,7 @@ let fechaYHoraIngreso = existingValoration ? existingValoration.ingreso.fechaYHo
                     motivoIngreso,
                     cama: bed._id,
                     numeroCama,
-                    fechaYHoraIngreso, //Guarda la fecha y hora del sistema o la misma fechaYHoraIngreso de la valoración existente
+                    fechaYHoraIngreso,
                     tipoIngreso
                 },
                 diagnostico,
@@ -603,7 +602,7 @@ let fechaYHoraIngreso = existingValoration ? existingValoration.ingreso.fechaYHo
             console.log('SE AGREGO VALORACION: ', newValoration);
             await newValoration.save();
             
-            // Cambiar el estado de la cama
+            // Cambia el estado de la cama
             await bed.cambiarEstado('No disponible');
  
             req.flash('success_msg', 'Nueva Valoración de Paciente Agregada Exitosamente');
@@ -622,24 +621,23 @@ router.get('/valorations', isAuthenticated, async (req, res) => {
 
         let valorations;
 
-        // Verificar si se proporciona un término de búsqueda
-        const search = req.query.search || ''; // Obtén el valor de search o establece una cadena vacía si es nulo
+        // Verifica si se proporciona un término de búsqueda
+        const search = req.query.search || ''; // Obtiene el valor de search o establece una cadena vacía si es nulo
 
-        // Verificar si se proporciona un término de búsqueda
         if (search) {
-                // Buscar todas las camas que coincidan con el número de cama
+                // Busca todas las camas que coincidan con el número de cama
                 const bedsB = await Bed.find({ numeroCama: isNaN(search) ? null : parseInt(search) }).lean();
 
-                // Obtener los IDs de las camas
+                // Obtiene los IDs de las camas
                 const bedIds = bedsB.map(bed => bed._id);
 
-            // Realizar la búsqueda por nombre y/o apellido
+            // Realiza la búsqueda por nombre y/o apellido
             valorations = await Valoration.find({
                 $or: [
                     { 'paciente.apellido': { $regex: new RegExp(req.query.search, 'i') } },
                     { 'paciente.nombre': { $regex: new RegExp(req.query.search, 'i') } },
-                    //{ 'ingreso.cama.servicio.nombre': { $regex: new RegExp(req.query.search, 'i') } }, //No me servía el buscar por nombre de servicio
-                    { 'ingreso.cama': { $in: bedIds } } // Buscar todas las valoraciones que tengan una de las camas
+                    //{ 'ingreso.cama.servicio.nombre': { $regex: new RegExp(req.query.search, 'i') } }, //Me está fallando el buscar por nombre de servicio, verlo luego
+                    { 'ingreso.cama': { $in: bedIds } } // Busca todas las valoraciones que tenga una de las camas
                 ]
             }).populate({
                 path: 'ingreso.cama',
@@ -648,7 +646,7 @@ router.get('/valorations', isAuthenticated, async (req, res) => {
                 }
             }).lean().sort({ fechaYHoraRecoleccionDatos: 'desc' });
         } else {
-            // Obtener todas las valoraciones
+            // Obtiene todas las valoraciones
             valorations = await Valoration.find().populate({
                 path: 'ingreso.cama',
                 populate: {
@@ -657,32 +655,31 @@ router.get('/valorations', isAuthenticated, async (req, res) => {
             }).lean().sort({ fechaYHoraRecoleccionDatos: 'desc' }).limit(10);
         }
 
-        // Crear un objeto para almacenar la valoración más reciente de cada paciente
+        // Crea un objeto para almacenar la valoración más reciente de cada paciente
         let latestValorationByPatient = {};
 
-        // Iterar sobre las valoraciones
+        // Itera sobre las valoraciones
         valorations.forEach(valoration => {
-            // Usar el DNI del paciente como clave
+            // Usa el DNI del paciente como clave
             let key = valoration.paciente.dni;
 
-            // Si el paciente no tiene una valoración más reciente o si la valoración actual es más reciente, actualizar la valoración más reciente
+            // Si el paciente no tiene una valoración más reciente o si la valoración actual es más reciente, actualiza la valoración más reciente
             if (!latestValorationByPatient[key] || valoration.fechaYHoraRecoleccionDatos > latestValorationByPatient[key].fechaYHoraRecoleccionDatos) {
                 latestValorationByPatient[key] = valoration;
             }
         });
 
-        // Iterar sobre las valoraciones de nuevo y agregar una propiedad `isLatest` a cada valoración
+        // Itera sobre las valoraciones de nuevo y agregar una propiedad `isLatest` a cada valoración
         valorations = valorations.map(valoration => {
             let key = valoration.paciente.dni;
             valoration.isLatest = valoration === latestValorationByPatient[key];
             return valoration;
         });
 
-
-        // Verificar si hay coincidencias
+        // Verifica si hay coincidencias
         const noResults = search && valorations.length === 0;
 
-        // Procesar cada valoración
+        // Procesa cada valoración
         valorations = valorations.map(valoration => {
             // Crea un nuevo objeto Date con la fecha y hora de la valoración
             let fechaHora = new Date(valoration.fechaYHoraRecoleccionDatos);
@@ -711,24 +708,23 @@ router.get('/valorations', isAuthenticated, async (req, res) => {
 
 router.get('/unfinished-patient-valorations', isAuthenticated, async (req, res) => {
     req.session.lastVisitedRoute = req.originalUrl; // Guarda la ruta actual en la sesión
-
+    
     try {
-
         let valorations;
 
         // Verificar si se proporciona un término de búsqueda
-        const search = req.query.search || ''; // Obtener el valor de search o establece una cadena vacía si es nulo
+        const search = req.query.search || ''; // Obtiene el valor de search o establece una cadena vacía si es nulo
 
-        // Verificar si se proporciona un término de búsqueda
+        // Verifica si se proporciona un término de búsqueda
         if (search) {
             
-            // Buscar todas las camas que coincidan con el número de cama
+            // Busca todas las camas que coincidan con el número de cama
             const bedsB = await Bed.find({ numeroCama: isNaN(search) ? null : parseInt(search) }).lean();
 
-            // Obtener los IDs de las camas
+            // Obtiene los IDs de las camas
             const bedIds = bedsB.map(bed => bed._id);
 
-            // Realizar la búsqueda por nombre y/o apellido
+            // Realiza la búsqueda por nombre o apellido o cama
             valorations = await Valoration.find({
                 $and: [
                     {
@@ -747,7 +743,7 @@ router.get('/unfinished-patient-valorations', isAuthenticated, async (req, res) 
                 }
             }).lean().sort({ fechaYHoraRecoleccionDatos: 'desc' });
         } else {
-            // Obtener todas las valoraciones que aún no finalizan su internación
+            // Obtiene todas las valoraciones que aún no finalizan su internación
             valorations = await Valoration.find({ 'ingreso.fechaYHoraAltaPaciente': null }).populate({
                 path: 'ingreso.cama',
                 populate: {
@@ -756,21 +752,21 @@ router.get('/unfinished-patient-valorations', isAuthenticated, async (req, res) 
             }).lean().sort({ fechaYHoraRecoleccionDatos: 'desc' });
         }
        
-        // Crear un objeto para almacenar la valoración más reciente de cada paciente
+        // Crea un objeto para almacenar la valoración más reciente de cada paciente
         let latestValorationByPatient = {};
 
-        // Iterar sobre las valoraciones
+        // Itera sobre las valoraciones
         valorations.forEach(valoration => {
-            // Usar el DNI del paciente como clave
+            // Usa el DNI del paciente como clave
             let key = valoration.paciente.dni;
 
-            // Si el paciente no tiene una valoración más reciente o si la valoración actual es más reciente, actualizar la valoración más reciente
+            // Si el paciente no tiene una valoración más reciente o si la valoración actual es más reciente, actualiza la valoración más reciente
             if (!latestValorationByPatient[key] || valoration.fechaYHoraRecoleccionDatos > latestValorationByPatient[key].fechaYHoraRecoleccionDatos) {
                 latestValorationByPatient[key] = valoration;
             }
         });
 
-        // Iterar sobre las valoraciones de nuevo y agregar una propiedad `isLatest` a cada valoración
+        // Itera sobre las valoraciones de nuevo y agregar una propiedad `isLatest` a cada valoración
         valorations = valorations.map(valoration => {
             let key = valoration.paciente.dni;
             valoration.isLatest = valoration === latestValorationByPatient[key];
@@ -778,12 +774,12 @@ router.get('/unfinished-patient-valorations', isAuthenticated, async (req, res) 
         });
 
 
-        // Verificar si hay coincidencias
+        // Verifica si hay coincidencias
         const noResults = search && valorations.length === 0;
 
-        // Procesar cada valoración
+        // Procesa cada valoración
         valorations = valorations.map(valoration => {
-            // Crear un nuevo objeto Date con la fecha y hora de la valoración
+            // Crea un nuevo objeto Date con la fecha y hora de la valoración
             let fechaHora = new Date(valoration.fechaYHoraRecoleccionDatos);
 
             // Obtiene la fecha en formato dd/mm/yyyy
@@ -816,7 +812,6 @@ router.get('/my-valorations/:id', isAuthenticated, async (req, res) => {
     const currentUserMatricula = req.params.id;
 
     try {
-
         let valorations;
 
         // Verifica si se proporciona un término de búsqueda
@@ -831,15 +826,15 @@ router.get('/my-valorations/:id', isAuthenticated, async (req, res) => {
             // Obtiene los IDs de las camas
             const bedIds = bedsB.map(bed => bed._id);            
             
-            // Realiza la búsqueda por nombre y/o apellido
+            // Realiza la búsqueda por nombre o apellido o cama
             valorations = await Valoration.find({
                 $and: [
                     {
                         $or: [
                             { 'paciente.apellido': { $regex: new RegExp(req.query.search, 'i') } },
                             { 'paciente.nombre': { $regex: new RegExp(req.query.search, 'i') } },
-                            //{ 'ingreso.cama.servicio.nombre': { $regex: new RegExp(req.query.search, 'i') } }, //No me servía la busqueda por nombre del servicio así que lo comenté
-                            { 'ingreso.cama': { $in: bedIds } } // Buscar todas las valoraciones que tengan una de las camas
+                            //{ 'ingreso.cama.servicio.nombre': { $regex: new RegExp(req.query.search, 'i') } }, //No me servía la busqueda por nombre del servicio así que lo comenté, para ver luego
+                            { 'ingreso.cama': { $in: bedIds } } // Busca todas las valoraciones que tenga una de las camas
                         ]
                     },
                     { 'matriculaCargador': currentUserMatricula }
@@ -851,7 +846,7 @@ router.get('/my-valorations/:id', isAuthenticated, async (req, res) => {
                 }
             }).lean().sort({ fechaYHoraRecoleccionDatos: 'desc' });
         } else {
-            // Obtener todas las valoraciones que aún no finalizan su internación
+            // Obtiene todas las valoraciones que aún no finalizan su internación
             valorations = await Valoration.find({ 'matriculaCargador': currentUserMatricula }).populate({
                 path: 'ingreso.cama',
                 populate: {
@@ -860,28 +855,28 @@ router.get('/my-valorations/:id', isAuthenticated, async (req, res) => {
             }).lean().sort({ fechaYHoraRecoleccionDatos: 'desc' });
         }
 
-        // Crear un objeto para almacenar la valoración más reciente de cada paciente
+        // Crea un objeto para almacenar la valoración más reciente de cada paciente
         let latestValorationByPatient = {};
 
-        // Iterar sobre las valoraciones
+        // Itera sobre las valoraciones
         valorations.forEach(valoration => {
-            // Usar el DNI del paciente como clave
+            // Usa el DNI del paciente como clave
             let key = valoration.paciente.dni;
 
-            // Si el paciente no tiene una valoración más reciente o si la valoración actual es más reciente, actualizar la valoración más reciente
+            // Si el paciente no tiene una valoración más reciente o si la valoración actual es más reciente, actualiza la valoración más reciente
             if (!latestValorationByPatient[key] || valoration.fechaYHoraRecoleccionDatos > latestValorationByPatient[key].fechaYHoraRecoleccionDatos) {
                 latestValorationByPatient[key] = valoration;
             }
         });
 
-        // Iterar sobre las valoraciones de nuevo y agregar una propiedad `isLatest` a cada valoración
+        // Itera sobre las valoraciones de nuevo y agregar una propiedad `isLatest` a cada valoración
         valorations = valorations.map(valoration => {
             let key = valoration.paciente.dni;
             valoration.isLatest = valoration === latestValorationByPatient[key];
             return valoration;
         });        
         
-        // Verificar si hay coincidencias
+        // Verifica si hay coincidencias
         const noResults = search && valorations.length === 0;
 
         // Procesa cada valoración
@@ -922,7 +917,7 @@ router.post('/valorations/finalizarInternacion/:id', isAuthenticated, async (req
         });
 
         if (!valoration) {
-            // Manejar el caso en que no se encuentre la valoración
+            // Maneja el caso en que no se encuentre la valoración
             res.status(404).send('Valoración no encontrada');
             return;
         }
@@ -946,7 +941,7 @@ router.post('/valorations/finalizarInternacion/:id', isAuthenticated, async (req
             await bed.cambiarEstado('Disponible');
             req.flash('success_msg', 'Internación finalizada con éxito y cama actualizada');
 
-             // Busca todas las valoraciones del paciente que tienen un estado de internación "No finalizada"
+             // Busca todas las valoraciones del paciente, que tienen un estado de internación "No finalizada"
              const valorations = await Valoration.find({ 
                 'paciente.dni': valoration.paciente.dni, 
                 'paciente.apellido': valoration.paciente.apellido, 
@@ -1007,7 +1002,8 @@ router.get('/valorations/edit/:id', isAuthenticated, async (req, res) => {
 
         // Verifica si fechaYHoraAltaPaciente no es null
         if (valoration.ingreso.fechaYHoraAltaPaciente !== null) {
-            // Creas un nuevo objeto Date con la fecha y hora de alta Paciente
+
+            // Crea un nuevo objeto Date con la fecha y hora de alta Paciente
             let fechaHoraAltaPaciente = new Date(valoration.ingreso.fechaYHoraAltaPaciente);
 
             // Obtiene la fecha de alta Paciente en formato dd/mm/yyyy
@@ -1033,7 +1029,7 @@ router.get('/valorations/edit/:id', isAuthenticated, async (req, res) => {
         const services = await Service.find({}).lean();
         const beds = await Bed.find({}).lean();
 
-        // Creas un nuevo objeto Date con la fecha y hora de ingreso
+        // Crea un nuevo objeto Date con la fecha y hora de ingreso
         let fechaHoraIngreso = new Date(valoration.ingreso.fechaYHoraIngreso);
 
         // Obtiene la fecha de ingreso en formato dd/mm/yyyy
@@ -1215,7 +1211,7 @@ router.put('/valorations/edit-valoration/:id', isAuthenticated, async (req, res)
         const updatedValoration = await Valoration.findByIdAndUpdate(
             req.params.id, {
                 'paciente.apellido': apellido,
-                'paciente.nombre': nombre, //LOS CAMPOS QUE SON OBLIGATORIOS NO LOS VOY A MODIFICAR ASÍ QUE NO SON NECESARIO QUE VAYAN, O SINO LOS COMENTO
+                'paciente.nombre': nombre,
                 'paciente.dni': dni,
                 'paciente.fechaNacimiento': fechaNacimiento,
                 'paciente.estadoCivil': estadoCivil,
@@ -1223,7 +1219,7 @@ router.put('/valorations/edit-valoration/:id', isAuthenticated, async (req, res)
                 'paciente.coberturaSalud': coberturaSalud,
                 'paciente.nacionalidad': nacionalidad,
                 'paciente.procedencia': procedencia,
-                'otrosProblemas.antecedenteAlergias': antecedenteAlergias === 'true', // Convierte a booleano
+                'otrosProblemas.antecedenteAlergias': antecedenteAlergias === 'true',
                 'otrosProblemas.antecedenteDbt': antecedenteDbt === 'true', 
                 'otrosProblemas.antecedenteHta': antecedenteHta === 'true',
                 'otrosProblemas.antecedenteObesidad': antecedenteObesidad === 'true',

@@ -509,7 +509,6 @@
                                     placeholder="-"
                                     value="{{valoration.oxigenacion.circulacion.ingurgitacionYugular}}" disabled>
                             </div>             
-                            <!-- FALTAN -->
                             <div class="form-group d-flex align-items-center justify-content-left">
                             <label class="mb-0 mr-2">Coloración de piel y muc.:</label>
                             </div>
@@ -667,14 +666,12 @@
                             {{/if}}
                         </select>
                     </div>
-                    <!-- Tamaño de Pupilas -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Tamaño de Pupilas:</label>
                         <input type="text" name="tamanioPupilas" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.sensopercepcion.tamanioPupilas}}" disabled>
                     </div>
-                    <!-- Simetría de Pupilas -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Simetría de Pupilas:</label>
                         <select name="simetriaPupilas" class="form-control border-1 bg-transparent" style="width: min-content;" disabled>
@@ -685,28 +682,24 @@
                             {{/if}}
                         </select>
                     </div>
-                    <!-- Reactividad -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Reactividad:</label>
                         <input type="text" name="reactividad" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.sensopercepcion.reactividad}}" disabled>
                     </div>
-                    <!-- Babinsky -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Babinsky:</label>
                         <input type="text" name="babinsky" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.sensopercepcion.babinsky}}" disabled>
                     </div>
-                    <!-- Otros Pupilas -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Otros Pupilas:</label>
                         <input type="text" name="otrosPupilas" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.sensopercepcion.otrosPupilas}}" disabled>
                     </div>
-                    <!-- Afasias -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Afasias:</label>
                         <div class="form-check">
@@ -724,21 +717,18 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Dolor -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Dolor:</label>
                         <input type="text" name="dolorSensopercepcion" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.sensopercepcion.dolorSensopercepcion}}" disabled>
                     </div>
-                    <!-- Características del Dolor -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Características del Dolor:</label>
                         <input type="text" name="caracteristicasDolor" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.sensopercepcion.caracteristicasDolor}}" disabled>
                     </div>
-                    <!-- Localización del Dolor -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Localización del Dolor:</label>
                         <input type="text" name="localizacionDolor" class="form-control border-1 bg-transparent"
@@ -752,14 +742,12 @@
                 <div class="card-header">3- Datos Nutricionales (Alimentos liquidos y electrolitos)</div>
                 <div class="card-body">
                     <!--Campos de Datos Nutricionales (Alimentos liquidos y electrolitos) -->
-                    <!-- Peso -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Peso:</label>
                         <input type="text" name="peso" class="form-control border-1 bg-transparent w-auto"
                             placeholder="-"
                             value="{{valoration.nutricion.peso}}" disabled><span>kg.</span>
                     </div>
-                    <!-- Talla -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Talla:</label>
                         <input type="text" name="talla" class="form-control border-1 bg-transparent w-auto"
@@ -783,14 +771,12 @@
                             </label>
                         </div>
                     </div>                    
-                    <!-- Hidratación -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Hidratación:</label>
                         <input type="text" name="hidratacion" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.nutricion.hidratacion}}" disabled>
                     </div>
-                    <!-- Signo del Pliegue -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Signo del Pliegue:</label>
                         <div class="form-check">
@@ -808,7 +794,6 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Autonomía para Alimentarse -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Autonomía para Alimentarse:</label>
                         <div class="form-check">
@@ -833,11 +818,9 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Alimentación Enteral Oral y Enteral SNG-->
                     <div class="form-group d-flex align-items-center justify-content-left">
                         <label class="mb-0 mr-2">Alimentación:</label>
                     </div>                    
-                    <!-- Alimentación Enteral Oral -->
                     <div class="form-group d-flex align-items-center justify-content-center">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="alimentacionEnteralOral" id="alimentacionEnteralOral" value="true" disabled {{#if valoration.nutricion.alimentacionEnteralOral}}checked{{/if}}>
@@ -845,7 +828,6 @@
                                 Enteral Oral
                             </label>
                         </div>
-                    <!-- Alimentación Enteral SNG -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="alimentacionEnteralSNG" id="alimentacionEnteralSNG" value="true" disabled {{#if valoration.nutricion.alimentacionEnteralSNG}}checked{{/if}}>
                             <label class="form-check-label" for="alimentacionEnteralSNG">
@@ -853,14 +835,12 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Ingresos Vía Oral -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Ingresos Vía Oral:</label>
                         <input type="text" name="ingresosViaOral" class="form-control border-1 bg-transparent w-auto"
                             placeholder="-"
                             value="{{valoration.nutricion.ingresosViaOral}}" disabled><span>ml.</span>
                     </div>
-                    <!-- Ingresos Vía Parenteral -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Ingresos Vía Parenteral:</label>
                         <input type="text" name="ingresosViaParenteral" class="form-control border-1 bg-transparent w-auto"
@@ -874,7 +854,6 @@
                 <div class="card-header">4- Datos de Eliminación</div>
                 <div class="card-body">
                     <!-- Campos de Datos de Eliminación -->
-                    <!-- ACÁ ME QUEDE ACÁ AGREGAR LOS OTROS DATOS -->
                      <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Ruidos Hidroaéreos:</label>
                         <input type="text" name="ruidosHidroaereos" class="form-control border-1 bg-transparent"
@@ -953,35 +932,30 @@
                 <div class="card-header">5- Datos de Aseo y valoración de piel</div>
                 <div class="card-body">
                     <!-- Campos de Datos de Aseo y valoración de piel -->
-                    <!-- Lesiones -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Lesiones:</label>
                         <input type="text" name="lesiones" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.aseoYPiel.lesiones}}" disabled>
                     </div>
-                    <!-- Localización de Lesiones -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Localización de Lesiones:</label>
                         <input type="text" name="localizacionLesiones" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.aseoYPiel.localizacionLesiones}}" disabled>
                     </div>
-                    <!-- Cicatrices -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Cicatrices:</label>
                         <input type="text" name="cicatrices" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.aseoYPiel.cicatrices}}" disabled>
                     </div>
-                    <!-- Localización de Cicatrices -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Localización de Cicatrices:</label>
                         <input type="text" name="localizacionCicatrices" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.aseoYPiel.localizacionCicatrices}}" disabled>
                     </div>
-                    <!-- Muda de Ropa -->
                     <div class="form-group d-flex align-items-center justify-content-left">
                         <label class="mb-0 mr-2">Dispone de:</label>
                         <div class="form-check">
@@ -990,7 +964,6 @@
                                 Muda de Ropa
                             </label>
                         </div>
-                    <!-- Elementos de Higiene -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="elementosDeHigiene" id="elementosDeHigiene" value="true" disabled {{#if valoration.aseoYPiel.elementosDeHigiene}}checked{{/if}}>
                             <label class="form-check-label" for="elementosDeHigiene">
@@ -998,7 +971,6 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Higiene Por Sí Mismo -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Puede realizar higiene por sí mismo:</label>
                         <div class="form-check">
@@ -1023,35 +995,30 @@
                 <div class="card-header">6- Datos de reposo y sueño</div>
                 <div class="card-body">
                     <!-- Campos de Datos de reposo y sueño -->
-                    <!-- Posición en Cama -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Posición en Cama:</label>
                         <input type="text" name="posicionEnCama" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.reposoYSuenio.posicionEnCama}}" disabled>
                     </div>
-                    <!-- Hábitos de Descanso Nocturno -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Hábitos de Descanso Nocturno:</label>
                         <input type="text" name="habitosDescansoNocturno" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.reposoYSuenio.habitosDescansoNocturno}}" disabled>
                     </div>
-                    <!-- Horas -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Horas:</label>
                         <input type="text" name="horas" class="form-control border-1 bg-transparent w-auto"
                             placeholder="-"
                             value="{{valoration.reposoYSuenio.horas}}" disabled>
                     </div>
-                    <!-- Alteración Sueño -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Alteración Sueño:</label>
                         <input type="text" name="alteracionSuenio" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.reposoYSuenio.alteracionSuenio}}" disabled>
                     </div>
-                    <!-- Sedantes -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Sedantes:</label>
                         <input type="text" name="sedantes" class="form-control border-1 bg-transparent"
@@ -1064,7 +1031,6 @@
             <div class="card mb-3">
                 <div class="card-header">7- Datos psicosociales</div>
                 <div class="card-body">
-                    <!-- Campos de Datos psicosociales -->
                     <div class="form-group d-flex align-items-center justify-content-left">
                         <label class="mb-0 mr-2">Estado de paciente:</label>
                     </div>
@@ -1075,14 +1041,12 @@
                                 Miedo
                             </label>
                         </div>
-                        <!-- Estado Negativismo -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="estadoNegativismo" id="estadoNegativismo" value="true" disabled {{#if valoration.psicosocial.estadoNegativismo}}checked{{/if}}>
                             <label class="form-check-label" for="estadoNegativismo">
                                 Negativismo
                             </label>
                         </div>
-                        <!-- Estado Inquietud -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="estadoInquietud" id="estadoInquietud" value="true" disabled {{#if valoration.psicosocial.estadoInquietud}}checked{{/if}}>
                             <label class="form-check-label" for="estadoInquietud">
@@ -1091,21 +1055,18 @@
                         </div>
                     </div>
                     <div class="form-group d-flex align-items-center justify-content-center">
-                        <!-- Estado Depresión -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="estadoDepresion" id="estadoDepresion" value="true" disabled {{#if valoration.psicosocial.estadoDepresion}}checked{{/if}}>
                             <label class="form-check-label" for="estadoDepresion">
                                 Depresión
                             </label>
                         </div>
-                        <!-- Estado Apatía -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="estadoApatia" id="estadoApatia" value="true" disabled {{#if valoration.psicosocial.estadoApatia}}checked{{/if}}>
                             <label class="form-check-label" for="estadoApatia">
                                 Apatía
                             </label>
                         </div>
-                        <!-- Estado Ansiedad -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="estadoAnsiedad" id="estadoAnsiedad" value="true" disabled {{#if valoration.psicosocial.estadoAnsiedad}}checked{{/if}}>
                             <label class="form-check-label" for="estadoAnsiedad">
@@ -1114,7 +1075,6 @@
                         </div>
                     </div>
                     <div class="form-group d-flex align-items-center justify-content-center">  
-                        <!-- Estado Agresividad -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="estadoAgresividad" id="estadoAgresividad" value="true" disabled {{#if valoration.psicosocial.estadoAgresividad}}checked{{/if}}>
                             <label class="form-check-label" for="estadoAgresividad">
@@ -1128,14 +1088,12 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Creencias Religión -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Creencias Religión:</label>
                         <input type="text" name="creenciasReligion" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.psicosocial.creenciasReligion}}" disabled>
                     </div>
-                    <!-- Trabaja Actualmente -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">¿Trabaja actualmente?:</label>
                         <div class="form-check">
@@ -1153,28 +1111,24 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Ocupación -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Ocupación:</label>
                         <input type="text" name="ocupacion" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.psicosocial.ocupacion}}" disabled>
                     </div>
-                    <!-- Desde Cuándo Trabaja -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">¿Desde cuándo trabaja?:</label>
                         <input type="text" name="desdeCuandoTrabaja" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.psicosocial.desdeCuandoTrabaja}}" disabled>
                     </div>
-                    <!-- Sentimiento en Trabajo -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">¿Cómo se siente en el trabajo?:</label>
                         <input type="text" name="sentimientoEnTrabajo" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.psicosocial.sentimientoEnTrabajo}}" disabled>
                     </div>
-                    <!-- Escolaridad -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Escolaridad:</label>
                         <select name="escolaridad" class="form-control border-1 bg-transparent" style="width: min-content;" disabled>
@@ -1185,7 +1139,6 @@
                             {{/if}}
                         </select>
                     </div>
-                    <!-- Aprendizaje -->
                     <div class="form-group d-flex align-items-center justify-content-left">
                         <label class="mb-0 mr-2">Aprendizaje:</label>
                     </div>
@@ -1196,7 +1149,6 @@
                                 Desea Aprender
                             </label>
                         </div>
-                        <!-- Negación al Tratamiento -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="aprendizajeNegacionAlTratamiento" id="aprendizajeNegacionAlTratamiento" value="true" disabled {{#if valoration.psicosocial.aprendizajeNegacionAlTratamiento}}checked{{/if}}>
                             <label class="form-check-label" for="aprendizajeNegacionAlTratamiento">
@@ -1217,7 +1169,6 @@
                 <div class="card-header">8- Factores de riesgo</div>
                 <div class="card-body">
                     <!-- Campos de Datos de Factores de riesgo -->
-                    <!-- Tabaquismo -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Tabaquismo:</label>
                         <div class="form-check">
@@ -1235,42 +1186,36 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Tabaquismo Cuántos -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Tabaquismo Cuántos:</label>
                         <input type="text" name="tabaquismoCuantos" class="form-control border-1 bg-transparent w-auto"
                             placeholder="-"
                             value="{{valoration.riesgo.tabaquismoCuantos}}" disabled>
                     </div>
-                    <!-- Consumo de Alcohol -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Consumo de Alcohol:</label>
                         <input type="text" name="consumoAlcohol" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.riesgo.consumoAlcohol}}" disabled>
                     </div>
-                    <!-- Enfermedades Preexistentes -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Enfermedades Preexistentes:</label>
                         <input type="text" name="enfermedadesPreexistentes" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.riesgo.enfermedadesPreexistentes}}" disabled>
                     </div>
-                    <!-- Motivo Fallecimiento Padres -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Motivo Fallecimiento Padres:</label>
                         <input type="text" name="motivoFallecimientoPadres" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.riesgo.motivoFallecimientoPadres}}" disabled>
                     </div>
-                    <!-- Motivo Fallecimiento Hermanos -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Motivo Fallecimiento Hermanos:</label>
                         <input type="text" name="motivoFallecimientoHermanos" class="form-control border-1 bg-transparent"
                             placeholder="-"
                             value="{{valoration.riesgo.motivoFallecimientoHermanos}}" disabled>
                     </div>
-                    <!-- Motivo Fallecimiento Abuelos -->
                     <div class="form-group d-flex align-items-center">
                         <label class="mb-0 mr-2">Motivo Fallecimiento Abuelos:</label>
                         <input type="text" name="motivoFallecimientoAbuelos" class="form-control border-1 bg-transparent"

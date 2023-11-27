@@ -323,7 +323,6 @@
                 <div class="card mb-3">
                     <div class="card-header">1- Datos de oxigenación (Cardio-respiratorio)</div>
                     <div class="card-body">
-                        <!-- Campos de Datos de oxigenación (Cardio-respiratorio) -->
                         <div class="card mb-3">
                             <div class="card-header">Respiración</div>
                             <div class="card-body">
@@ -858,13 +857,11 @@
                 <div class="card mb-3">
                     <div class="card-header">3- Datos Nutricionales (Alimentos liquidos y electrolitos)</div>
                     <div class="card-body">
-                        <!-- Campos de Datos Nutricionales (Alimentos liquidos y electrolitos) -->
                         <div class="form-group d-flex align-items-center">
                             <label class="mb-0 mr-2">Peso:</label>
                             <input type="number" name="peso" class="form-control w-auto" placeholder="Peso" value="{{peso}}" min="1" max="200"
                                 step="1"><span>kg.</span>
                         </div>
-
                         <div class="form-group d-flex align-items-center">
                             <label class="mb-0 mr-2">Talla:</label>
                             <input type="number" name="talla" class="form-control w-auto" placeholder="Talla" value="{{talla}}" min="10" max="250"
@@ -1339,7 +1336,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Botón Guardar -->
                 <div class="form-group d-flex align-items-center">
                     <button class="btn btn-primary btn-block" type="submit">
@@ -1354,8 +1350,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const serviceSelect = document.getElementById('servicio'); // Usa 'servicio' aquí
-        const serviceNameInput = document.getElementById('servicioNombre'); // Obtén el campo oculto
+        const serviceSelect = document.getElementById('servicio');
+        const serviceNameInput = document.getElementById('servicioNombre'); // Obtiene el campo oculto
         const bedSelect = document.getElementById('bedSelect');
         const beds = {{{ json beds }}};
         const aperturaOcularSelect = document.getElementById('aperturaOcular');
@@ -1426,8 +1422,6 @@
             const selectedServiceName = serviceSelect.options[serviceSelect.selectedIndex].getAttribute('data-name');
             serviceNameInput.value = selectedServiceName;
 
-            /*actualizarCamas();
-            updateSum();*/
             if (selectedService) {
                 // Si se seleccionó un servicio, habilita el select de camas y actualiza las camas
                 bedSelect.disabled = false;
@@ -1442,9 +1436,9 @@
 
 
         // Establece el valor seleccionado para numeroCama
-        bedSelect.value = '{{numeroCama}}'; // Asegúrate de que la variable 'numeroCama' esté disponible en tu entorno de renderización      
+        bedSelect.value = '{{numeroCama}}';     
         
-        // Nuevo código para manejar la habilitación/deshabilitación del campo tabaquismoCuantos
+        // Manejar la habilitación/deshabilitación del campo tabaquismoCuantos
         const tabaquismoSiRadio = document.getElementById('tabaquismoSi');
         const tabaquismoNoRadio = document.getElementById('tabaquismoNo');
         const tabaquismoCuantosInput = document.querySelector('input[name="tabaquismoCuantos"]');
@@ -1475,12 +1469,12 @@ document.querySelector('form').addEventListener('submit', (event) => {
 function formatDate(date) {
     let fechaHora = new Date(date);
 
-    // Obtienes la fecha en formato yyyy-mm-dd
+    // Obtiene la fecha en formato yyyy-mm-dd
     let fecha = fechaHora.getFullYear() + '-' + ('0' + (fechaHora.getMonth() + 1)).slice(-2) + '-' + ('0' + fechaHora.getDate()).slice(-2);
     return fecha;
 }
 
-//♥Para que si completa dni se cargue automaticamente el paciente
+//Para que si completa dni se cargue automaticamente el paciente
 document.querySelector('input[name="dni"]').addEventListener('change', function() {
     const dni = this.value;
     fetch(`/paciente/${dni}`)
@@ -1582,7 +1576,7 @@ document.querySelector('input[name="dni"]').addEventListener('change', function(
                 let camaCorrespondiente = bedsFromJson.find(cama => cama._id === numeroCamaId);
                 console.log('camaCorrespondiente:', camaCorrespondiente);
 
-                // Si se encontró la cama, obtén su número
+                // Si se encontró la cama, obtiene su número
                 let numeroCama = camaCorrespondiente ? camaCorrespondiente.numeroCama : null;
                 console.log('numeroCama:', numeroCama);
 
@@ -1635,7 +1629,7 @@ document.querySelector('input[name="dni"]').addEventListener('change', function(
                 
                 //Antecedentes
                 // Antecedente Alergias
-                //No me está funcionando correctamente la recuperacion de los boolean para cargar en checkbox, por so lo deshabilité
+                //No me está funcionando correctamente la recuperacion de los boolean para cargar en los checkbox, por eso lo deshabilité
                 /*let antecedenteAlergiasInput = document.querySelector('input[name="antecedenteAlergias"]');
                 let antecedenteAlergiasHiddenInput = document.createElement('input');
                 antecedenteAlergiasHiddenInput.type = 'hidden';
@@ -1862,6 +1856,7 @@ document.querySelector('input[name="dni"]').addEventListener('change', function(
 
             actualizarCamas();
         });
+        
         // Llamada inicial para actualizar las camas al cargar la página
         actualizarCamas();
         updateSum();

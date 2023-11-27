@@ -61,7 +61,6 @@ const ValorationSchema = new Schema({
             tos: { type: String, required: false },
             expectoracion: { type: String, required: false },
             hipoventilacion: { type: String, required: false },
-            //Uso musc acc.: Intercostales, Diafragmatico, accesorios del tronco
             disnea: { type: String, required: false },
             auscMurmulloVesicular: { type: Boolean, required: false },
             auscSibilancias: { type: Boolean, required: false },
@@ -70,12 +69,10 @@ const ValorationSchema = new Schema({
             auscGorgoteos: { type: Boolean, required: false },
         },
         circulacion: {
-            frecuenciaCardiaca: { type: Number, required: true }, //0 a 300 L.P.M.
+            frecuenciaCardiaca: { type: Number, required: true },
             ritmoCirculacion : { type: String, required: true, enum: ['Regular', 'Irregular'] },
             intensidad: { type: String, required: true, enum: ['Débil', 'Normal', 'Fuerte'] },
             tension: { type: Number, required: true },
-            //monitor si o no
-            //ECG
             amplitud: { type: String, required: true, enum: ['Débil', 'Normal', 'Fuerte'] },
             pulsosPerifericos: { type: String, required: true },
             ruidosCardiacos: { type: String, required: false },
@@ -107,7 +104,7 @@ const ValorationSchema = new Schema({
         reactividad: { type: String, required: false },
         babinsky: { type: String, required: false },
         otrosPupilas: { type: String, required: false },
-        afasias: {type: String, required: false }, //afasias es check input radio con opciones Si y No
+        afasias: {type: String, required: false },
         dolorSensopercepcion: { type: String, required: false },
         caracteristicasDolor: { type: String, required: false },
         localizacionDolor: { type: String, required: false }
@@ -115,31 +112,21 @@ const ValorationSchema = new Schema({
     nutricion: {
         peso: { type: Number, required: false },
         talla: { type: Number, required: false },
-        obesidad: { type: String, required: false }, //obesidad es check input radio con opciones Si y No
+        obesidad: { type: String, required: false },
         hidratacion: { type: String, required: false },
-        signoPliegue: { type: String, required: false }, //signoPliegue es check input radio con opciones Positivo y Negativo
-        autonomiaParaAlimentarse: { type: String, required: false }, //autonomiaParaAlimentarse es check input radio con tres opciones que son: Total, Parcial y Ninguna
-        alimentacionEnteralOral: { type: Boolean, required: false }, //alimentacionEnteralOral será check input checkbox junto con alimentacionEnteralSNG
+        signoPliegue: { type: String, required: false },
+        autonomiaParaAlimentarse: { type: String, required: false },
+        alimentacionEnteralOral: { type: Boolean, required: false },
         alimentacionEnteralSNG: { type: Boolean, required: false },
         ingresosViaOral: { type: Number, required: false },
         ingresosViaParenteral: { type: Number, required: false }
     },
     eliminacion: {
         ruidosHidroaereos: { type: String, required: false },
-        distencionAbdominal: { type: String, required: false },//distucionAbdominal es check input radio con opciones Si y No
-        colorDeposiciones: { type: String, required: false }, //Puede ser verde, amarillo, blanc o gris, oscura, anaranjada, rojiza
-        consistenciaDeposiciones: { type: String, required: false }, //solida, semisolida, liquida
+        distencionAbdominal: { type: String, required: false },
+        colorDeposiciones: { type: String, required: false },
+        consistenciaDeposiciones: { type: String, required: false },
         otrasCaracteristicasDeposiciones: { type: String, required: false },
-        //ostomias: si o no
-        //orina color: ambar, rojiza, traslucida,anarajnada, cafe, azul verdosa
-        //sonda vesical si o no
-        //colector si o no
-        //incontinencia
-        //retencion si o no
-        //dif para orinar si o no
-        //drenjes tipo texto para escribir
-        //localizacion para escribir
-        //caracterisitcas para escribir
         sudoracion: { type: String, required: false },
         totalEgresosSudoracion: { type: Number, required: false },
         perdidaInsensibleSudoracion: { type: Number, required: false },
@@ -151,9 +138,9 @@ const ValorationSchema = new Schema({
         localizacionLesiones:  { type: String, required: false },
         cicatrices: { type: String, required: false },
         localizacionCicatrices: { type: String, required: false },
-        mudaDeRopa: { type: Boolean, required: false }, //mudaDeRopa será check input checkbox junto con elementosDeHigiene
+        mudaDeRopa: { type: Boolean, required: false },
         elementosDeHigiene: { type: Boolean, required: false },
-        higienePorSiMismo: { type: String, required: false }, //higienePorSiMismo es check input radio con opciones Si y No
+        higienePorSiMismo: { type: String, required: false },
     },
     reposoYSuenio: {
         posicionEnCama: { type: String, required: false },
@@ -161,10 +148,9 @@ const ValorationSchema = new Schema({
         horas: { type: Number, required: false },
         alteracionSuenio: { type: String, required: false },
         sedantes: { type: String, required: false }
-        //hab para ind si o no
     },
     psicosocial: {
-        estadoMiedo: { type: Boolean, required: false }, //estadoMiedo será check input checkbox junto con estadoNegativismo, estadoInquietud, estadoDepresion, estadoApatia, estadoAnsiedad, estadoAgresividad y estadoLlanto
+        estadoMiedo: { type: Boolean, required: false },
         estadoNegativismo: { type: Boolean, required: false },
         estadoInquietud: { type: Boolean, required: false },
         estadoDepresion: { type: Boolean, required: false },
@@ -173,17 +159,17 @@ const ValorationSchema = new Schema({
         estadoAgresividad: { type: Boolean, required: false },
         estadoLlanto: { type: Boolean, required: false },
         creenciasReligion: { type: String, required: false },
-        trabajaActualmente: { type: String, required: false }, //trabajaActualmente es check input radio con opciones Si y No
+        trabajaActualmente: { type: String, required: false },
         ocupacion: { type: String, required: false },
         desdeCuandoTrabaja: { type: String, required: false },
         sentimientoEnTrabajo: { type: String, required: false },
         escolaridad: { type: String, required: false, enum: ['Incompleta', 'Primaria', 'Secundaria', 'Terciaria', 'Universitaria'] },
-        aprendizajeDeseaAprender: { type: Boolean, required: false }, //aprendizajeDeseaAprender será check input checkbox junto con aprendizajeNegacionAlTratamiento y aprendizajeAceptacionAlTratamiento
+        aprendizajeDeseaAprender: { type: Boolean, required: false },
         aprendizajeNegacionAlTratamiento : { type: Boolean, required: false },
         aprendizajeAceptacionAlTratamiento : { type: Boolean, required: false },
     },
     riesgo: {
-        tabaquismo: { type: String, required: false }, //tabaquismo es check input radio con opciones Si y No
+        tabaquismo: { type: String, required: false },
         tabaquismoCuantos: { type: Number, required: false },
         consumoAlcohol: { type: String, required: false },
         enfermedadesPreexistentes: { type: String, required: false },
