@@ -133,13 +133,13 @@ router.get('/users', isAuthenticated, async (req, res) => {
 
         let users;
 
-        // Verificar si se proporciona un término de búsqueda
-        const search = req.query.search || ''; // Obtén el valor de search o establece una cadena vacía si es nulo
+        // Verifica si se proporciona un término de búsqueda
+        const search = req.query.search || ''; // Obtiene el valor de search o establece una cadena vacía si es nulo
 
-        // Verificar si se proporciona un término de búsqueda
+        // Verifica si se proporciona un término de búsqueda
         if (search) {
 
-            // Realizar la búsqueda por nombre y/o apellido
+            // Realiza la búsqueda por nombre o apellido o nombre de usuario
             users = await User.find({
                 $and: [
                     {
@@ -156,24 +156,23 @@ router.get('/users', isAuthenticated, async (req, res) => {
             users = await User.find().populate().lean().sort({ fechaYHoraCreacion: 'desc' });
         }
 
-        // Verificar si hay coincidencias
+        // Verifica si hay coincidencias
         const noResults = search && users.length === 0;
 
-        // Procesas cada usuario
+        // Procesa cada usuario
        users = users.map(user => {
-            // Creas un nuevo objeto Date con la fecha y hora de la valoración
+            // Crea un nuevo objeto Date con la fecha y hora de la valoración
             let fechaHora = new Date(user.fechaYHoraCreacion);
 
-            // Obtienes la fecha en formato dd/mm/yyyy
+            // Obtiene la fecha en formato dd/mm/yyyy
             let fecha = ('0' + fechaHora.getDate()).slice(-2) + '/' + ('0' + (fechaHora.getMonth() + 1)).slice(-2) + '/' + fechaHora.getFullYear();
 
-            // Obtienes la hora en formato hh:mm
+            // Obtiene la hora en formato hh:mm
             let hora = ('0' + fechaHora.getHours()).slice(-2) + ':' + ('0' + fechaHora.getMinutes()).slice(-2);
 
-            // Reemplazas la fecha y hora de la valoración con la fecha y hora procesadas
+            // Reemplaza la fecha y hora de la valoración con la fecha y hora procesadas
             user.date = fecha;
             user.time = hora;
-
             //console.log(user);
             return user;
         });
@@ -187,19 +186,19 @@ router.get('/users', isAuthenticated, async (req, res) => {
 
 router.get('/users/show/:id', isAuthenticated, async (req, res) => {
     try {
-        // Obtienes la valoración de tu base de datos
+        // Obtiene la valoración de tu base de datos
         let user = await User.findById(req.params.id).lean();
         
-        // Creas un nuevo objeto Date con la fecha y hora de la valoración
+        // Crea un nuevo objeto Date con la fecha y hora de la valoración
         let fechaHora = new Date(user.fechaYHoraCreacion);
 
-        // Obtienes la fecha de valoración en formato dd/mm/yyyy
+        // Obtiene la fecha de valoración en formato dd/mm/yyyy
         let fecha = ('0' + fechaHora.getDate()).slice(-2) + '/' + ('0' + (fechaHora.getMonth() + 1)).slice(-2) + '/' + fechaHora.getFullYear();
 
-        // Obtienes la hora de valoración en formato hh:mm
+        // Obtiene la hora de valoración en formato hh:mm
         let hora = ('0' + fechaHora.getHours()).slice(-2) + ':' + ('0' + fechaHora.getMinutes()).slice(-2);
 
-        // Reemplazas la fecha y hora de la valoración con la fecha y hora procesadas
+        // Reemplaza la fecha y hora de la valoración con la fecha y hora procesadas
         user.date = fecha;
         user.time = hora;
 

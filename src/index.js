@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const exphbs = require('express-handlebars');
-const Handlebars = require('handlebars'); // Asegúrate de requerir Handlebars
+const Handlebars = require('handlebars');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const passport = require('passport');
@@ -32,7 +32,6 @@ const hbs = exphbs.create({
             switch (operator) {
                 case '===':
                     return (v1 === v2) ? options.fn(this) : options.inverse(this);
-                // Puedes agregar más operadores si los necesitas
                 default:
                     return options.inverse(this);
             }
@@ -53,7 +52,6 @@ const hbs = exphbs.create({
         },
     },
     
-    //AGREGADO AL ULTIMO
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
@@ -64,13 +62,12 @@ hbs.handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
     switch (operator) {
         case '===':
             return (v1 === v2) ? options.fn(this) : options.inverse(this);
-        // puedes agregar más operadores si los necesitas
         default:
             return options.inverse(this);
     }
 });
 
-// Registra tu helper 'json'
+// Registra helper 'json'
 Handlebars.registerHelper('json', function (context) {
     return JSON.stringify(context);
 });
@@ -80,7 +77,7 @@ hbs.handlebars.registerHelper('toString', function(number) {
     return number.toString();
 });
 
-// Registra los nuevos helpers 'formatDate' y 'formatTime'
+// Registra los helpers 'formatDate' y 'formatTime'
 hbs.handlebars.registerHelper('formatDate', function (date) {
     if (!date) {
         return '-';
@@ -110,7 +107,6 @@ hbs.handlebars.registerHelper('ifCondStr', function (v1, operator, v2, options) 
     switch (operator) {
         case '===':
             return (v1.toString() === v2.toString()) ? options.fn(this) : options.inverse(this);
-        // puedes agregar más operadores si los necesitas
         default:
             return options.inverse(this);
     }
@@ -145,7 +141,6 @@ app.use((req, res, next) => {
             return res.redirect('/users');
         }
     }
-
     next();
 });
 
