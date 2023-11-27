@@ -40,10 +40,10 @@ router.post('/users/signup', async (req, res) => {
         errors.push({ text: 'Por favor inserte un Email' });
     }
     if (!password) {
-        errors.push({ text: 'Por favor inserte un Password de al menos 4 caracteres' });
+        errors.push({ text: 'Por favor inserte un Password de al menos 6 caracteres' });
     }
-    if (password.length < 4) {
-        errors.push({ text: 'El Password debe tener al menos 4 caracteres' });
+    if (password.length < 6) {
+        errors.push({ text: 'El Password debe tener al menos 6 caracteres' });
     }
     if (password != confirmacionPassword) {
         errors.push({ text: 'Los Password insertados no coinciden' });
