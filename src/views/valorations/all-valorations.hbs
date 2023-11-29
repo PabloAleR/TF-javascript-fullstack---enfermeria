@@ -80,12 +80,14 @@
                             </button>
                         </form>
                         <!-- Agrega el botón solo si la internación no está finalizada -->
-                        {{#if isLatest}}   
-                            <form action="/valorations/finalizarInternacion/{{_id}}" method="POST" class="mb-2" onsubmit="return confirm('¿Estás seguro de que deseas dar de alta al siguiente paciente?\nApellido: {{paciente.apellido}}\nNombre: {{paciente.nombre}}\nCama: {{ingreso.cama.numeroCama}}\nServicio: {{ingreso.cama.servicio.nombre}}')">
-                                <button class="btn btn-success btn-block btn-sm" type="submit">
-                                    Dar de Alta
-                                </button>
-                            </form>
+                        {{#if isLatest}}
+                            {{#ifCond ingreso.estadoInternacion '===' 'No finalizada'}}
+                                <form action="/valorations/finalizarInternacion/{{_id}}" method="POST" class="mb-2" onsubmit="return confirm('¿Estás seguro de que deseas dar de alta al siguiente paciente?\nApellido: {{paciente.apellido}}\nNombre: {{paciente.nombre}}\nCama: {{ingreso.cama.numeroCama}}\nServicio: {{ingreso.cama.servicio.nombre}}')">
+                                    <button class="btn btn-success btn-block btn-sm" type="submit">
+                                        Dar de Alta
+                                    </button>
+                                </form>
+                            {{/ifCond}}
                         {{/if}}
                     </div>
                 </div>
