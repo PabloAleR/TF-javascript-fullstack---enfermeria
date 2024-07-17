@@ -424,181 +424,532 @@ router.post('/valorations/new-valoration', isAuthenticated, async (req, res) => 
             // Si existe tal valoración, guardar en fechaYHoraIngreso la misma fechaYHoraIngreso de la valoración existente
             // Si no existe tal valoración, guardar la fecha y hora del sistema en fechaYHoraIngreso
             let fechaYHoraIngreso = existingValoration ? existingValoration.ingreso.fechaYHoraIngreso : Date.now();
-            const newValoration = new Valoration({
-                paciente: {
-                    apellido,
-                    nombre,
-                    dni,
-                    fechaNacimiento,
-                    sexo,
-                    estadoCivil,
-                    domicilioActual,
-                    coberturaSalud,
-                    nacionalidad,
-                    procedencia
-                },
-                ingreso: {
-                    motivoIngreso,
-                    cama: bed._id,
-                    numeroCama,
-                    fechaYHoraIngreso,
-                    tipoIngreso
-                },
-                diagnostico,
-                otrosProblemas: {
-                    antecedenteAlergias,
-                    antecedenteDbt,
-                    antecedenteHta,
-                    antecedenteObesidad,
-                    antecedenteChagas,
-                    antecedenteIrregularidadCicloMenstrual,
-                    antecedenteAsma
-                },
-                indicaciones: {
-                    descripcion,
-                    examenesComplementarios,
-                    otros  
-                },
-                situacionActual: {
-                    observacionGeneral,
-                    entrevista,
-                    examenInspeccion,
-                    examenAuscultacion,
-                    examenPalpacion,
-                    examenPercusion
-                },
-                oxigenacion: {
-                    respiracion: {
-                        frecuenciaRespiratoria,
-                        ritmoRespiratorio,
-                        profundidad,
-                        simetria,
-                        viaAerPerm,
-                        secreciones,
-                        color,
-                        tos,
-                        expectoracion,
-                        hipoventilacion,
-                        disnea,
-                        auscMurmulloVesicular,
-                        auscSibilancias,
-                        auscCrepitantes,
-                        auscRoncus,
-                        auscGorgoteos
-                    },
-                    circulacion: {
-                        frecuenciaCardiaca,
-                        ritmoCirculacion,
-                        intensidad,
-                        tension,
-                        amplitud,
-                        pulsosPerifericos,
-                        ruidosCardiacos,
-                        latidoDePunta,
-                        tensionArterial,
-                        ingurgitacionYugular,
-                        coloracionPielYMucRosada,
-                        coloracionPielYMucPalida,
-                        coloracionPielYMucCianosis,
-                        coloracionPielYMucLivideces,
-                        coloracionPielYMucIctericia,
-                        coloracionPielYMucOtra,
-                        temperaturaAxilar,
-                        temperaturaRectal,
-                        edemas
-                    }
-                },
-                sensopercepcion: {
-                    nivelConcienciaLucido,
-                    nivelConcienciaConfuso,
-                    nivelConcienciaDelirante,
-                    nivelConcienciaEstuporoso,
-                    nivelConcienciaComa,
-                    aperturaOcular,
-                    respuestaMotora,
-                    respuestaVerbal,
-                    tamanioPupilas,
-                    simetriaPupilas,
-                    reactividad,
-                    babinsky,
-                    otrosPupilas,
-                    afasias,
-                    dolorSensopercepcion,
-                    caracteristicasDolor,
-                    localizacionDolor,
-                },
-                nutricion: {
-                    peso,
-                    talla,
-                    obesidad,
-                    hidratacion,
-                    signoPliegue,
-                    autonomiaParaAlimentarse,
-                    alimentacionEnteralOral,
-                    alimentacionEnteralSNG,
-                    ingresosViaOral,
-                    ingresosViaParenteral
-                },
-                eliminacion: {
-                    ruidosHidroaereos,
-                    distencionAbdominal,
-                    colorDeposiciones,
-                    consistenciaDeposiciones,
-                    otrasCaracteristicasDeposiciones,
-                    sudoracion,
-                    totalEgresosSudoracion,
-                    perdidaInsensibleSudoracion,
-                    totalIngresosBalanceHidrico,
-                    totalEgresosBalanceHidrico
-                },
-                aseoYPiel: {
-                    lesiones,
-                    localizacionLesiones,
-                    cicatrices,
-                    localizacionCicatrices,
-                    mudaDeRopa,
-                    elementosDeHigiene,
-                    higienePorSiMismo
-                },
-                reposoYSuenio: {
-                    posicionEnCama,
-                    habitosDescansoNocturno,
-                    horas,
-                    alteracionSuenio,
-                    sedantes
-                },
-                psicosocial: {
-                    estadoMiedo,
-                    estadoNegativismo,
-                    estadoInquietud,
-                    estadoDepresion,
-                    estadoApatia,
-                    estadoAnsiedad,
-                    estadoAgresividad,
-                    estadoLlanto,
-                    creenciasReligion,
-                    trabajaActualmente,
-                    ocupacion,
-                    desdeCuandoTrabaja,
-                    sentimientoEnTrabajo,
-                    escolaridad,
-                    aprendizajeDeseaAprender,
-                    aprendizajeNegacionAlTratamiento,
-                    aprendizajeAceptacionAlTratamiento
-                },
-                riesgo: {
-                    tabaquismo,
-                    tabaquismoCuantos,
-                    consumoAlcohol,
-                    enfermedadesPreexistentes,
-                    motivoFallecimientoPadres,
-                    motivoFallecimientoHermanos,
-                    motivoFallecimientoAbuelos
-                },
-                apellidoCargador: req.user.profesional.apellido,
-                nombreCargador: req.user.profesional.nombre,
-                matriculaCargador: req.user.profesional.matriculaProfesional                
-            });
+            const newValoration = new Valoration();
+                
+                //Datos de paciente
+                if (apellido) {
+                    newValoration.paciente.apellido = apellido;
+                }
+                if (nombre) {
+                    newValoration.paciente.nombre = nombre;
+                }
+                if (dni) {
+                    newValoration.paciente.dni = dni;
+                }
+                if (fechaNacimiento) {
+                    newValoration.paciente.fechaNacimiento = fechaNacimiento;
+                }
+                newValoration.paciente.sexo = sexo;
+                if (estadoCivil) {
+                    newValoration.paciente.estadoCivil = estadoCivil;
+                }
+                if (domicilioActual) {
+                    newValoration.paciente.domicilioActual = domicilioActual;
+                }
+                if (coberturaSalud) {
+                    newValoration.paciente.coberturaSalud = coberturaSalud;
+                }
+                if (nacionalidad) {
+                    newValoration.paciente.nacionalidad = nacionalidad;
+                }
+                if (procedencia) {
+                    newValoration.paciente.procedencia = procedencia;
+                }
+                
+                //Datos de Ingreso
+                newValoration.ingreso.motivoIngreso = motivoIngreso;                
+                newValoration.ingreso.cama = bed._id;                
+                newValoration.ingreso.fechaYHoraIngreso = fechaYHoraIngreso;             
+                newValoration.ingreso.tipoIngreso = tipoIngreso;             
+                newValoration.diagnostico = diagnostico;           
+                if (antecedenteAlergias) {
+                    newValoration.otrosProblemas.antecedenteAlergias = antecedenteAlergias;
+                }
+                if (antecedenteDbt) {
+                    newValoration.otrosProblemas.antecedenteDbt = antecedenteDbt;
+                } 
+                if (antecedenteHta) {
+                    newValoration.otrosProblemas.antecedenteHta = antecedenteHta;
+                }
+                if (antecedenteObesidad) {
+                    newValoration.otrosProblemas.antecedenteObesidad = antecedenteObesidad;
+                }
+                if (antecedenteChagas) {
+                    newValoration.otrosProblemas.antecedenteChagas = antecedenteChagas;
+                }
+                if (antecedenteIrregularidadCicloMenstrual) {
+                    newValoration.otrosProblemas.antecedenteIrregularidadCicloMenstrual = antecedenteIrregularidadCicloMenstrual;
+                }
+                if (antecedenteAsma) {
+                    newValoration.otrosProblemas.antecedenteAsma = antecedenteAsma;
+                }
+                if (descripcion) {
+                    newValoration.indicaciones.descripcion = descripcion;
+                }
+                if (examenesComplementarios) {
+                    newValoration.indicaciones.examenesComplementarios = examenesComplementarios;
+                }
+                if (otros) {
+                    newValoration.indicaciones.otros = otros;
+                }
+                
+                //Datos de situación actual
+                if (observacionGeneral) {
+                    newValoration.situacionActual.observacionGeneral = observacionGeneral;
+                }
+                if (entrevista) {
+                    newValoration.situacionActual.entrevista = entrevista;
+                }
+                if (examenInspeccion) {
+                    newValoration.situacionActual.examenInspeccion = examenInspeccion;
+                }
+                if (examenAuscultacion) {
+                    newValoration.situacionActual.examenAuscultacion = examenAuscultacion;
+                }
+                if (examenPalpacion) {
+                    newValoration.situacionActual.examenPalpacion = examenPalpacion;
+                }
+                if (examenPercusion) {
+                    newValoration.situacionActual.examenPercusion = examenPercusion;
+                }
+
+                //Datos de oxigenacion
+                if (frecuenciaRespiratoria) {
+                    newValoration.oxigenacion.respiracion.frecuenciaRespiratoria = frecuenciaRespiratoria;
+                }
+                if (ritmoRespiratorio) {
+                    newValoration.oxigenacion.respiracion.ritmoRespiratorio = ritmoRespiratorio;
+                }
+                if (profundidad) {
+                    newValoration.oxigenacion.respiracion.profundidad = profundidad;
+                }
+                if (simetria) {
+                    newValoration.oxigenacion.respiracion.simetria = simetria;
+                }
+                
+                if (viaAerPerm) {
+                    newValoration.oxigenacion.respiracion.viaAerPerm = viaAerPerm;
+                }
+                
+                if (secreciones) {
+                    newValoration.oxigenacion.respiracion.secreciones = secreciones;
+                }
+                if (color) {
+                    newValoration.oxigenacion.respiracion.color = color;
+                }
+                
+                if (tos) {
+                    newValoration.oxigenacion.respiracion.tos = tos;
+                }
+                
+                if (expectoracion) {
+                    newValoration.oxigenacion.respiracion.expectoracion = expectoracion;
+                }
+                
+                if (hipoventilacion) {
+                    newValoration.oxigenacion.respiracion.hipoventilacion = hipoventilacion;
+                }
+                
+                if (disnea) {
+                    newValoration.oxigenacion.respiracion.disnea = disnea;
+                }
+                
+                if (auscMurmulloVesicular !== undefined) {
+                    newValoration.oxigenacion.respiracion.auscMurmulloVesicular = auscMurmulloVesicular;
+                }
+                
+                if (auscSibilancias !== undefined) {
+                    newValoration.oxigenacion.respiracion.auscSibilancias = auscSibilancias;
+                }
+                
+                if (auscCrepitantes !== undefined) {
+                    newValoration.oxigenacion.respiracion.auscCrepitantes = auscCrepitantes;
+                }
+                
+                if (auscRoncus !== undefined) {
+                    newValoration.oxigenacion.respiracion.auscRoncus = auscRoncus;
+                }
+                
+                if (auscGorgoteos !== undefined) {
+                    newValoration.oxigenacion.respiracion.auscGorgoteos = auscGorgoteos;
+                }                
+                
+                if (frecuenciaCardiaca) {
+                    newValoration.oxigenacion.circulacion.frecuenciaCardiaca = frecuenciaCardiaca;
+                }
+                if (ritmoCirculacion) {
+                    newValoration.oxigenacion.circulacion.ritmoCirculacion = ritmoCirculacion;
+                }
+                if (intensidad) {
+                    newValoration.oxigenacion.circulacion.intensidad = intensidad;
+                }
+                if (tension) {
+                    newValoration.oxigenacion.circulacion.tension = tension;
+                }
+
+                if (amplitud) {
+                    newValoration.oxigenacion.circulacion.amplitud = amplitud;
+                }
+
+                if (pulsosPerifericos) {
+                    newValoration.oxigenacion.circulacion.pulsosPerifericos = pulsosPerifericos;
+                }
+
+                if (ruidosCardiacos) {
+                    newValoration.oxigenacion.circulacion.ruidosCardiacos = ruidosCardiacos;
+                }
+
+                if (latidoDePunta) {
+                    newValoration.oxigenacion.circulacion.latidoDePunta = latidoDePunta;
+                }
+
+                if (tensionArterial) {
+                    newValoration.oxigenacion.circulacion.tensionArterial = tensionArterial;
+                }
+
+                if (ingurgitacionYugular) {
+                    newValoration.oxigenacion.circulacion.ingurgitacionYugular = ingurgitacionYugular;
+                }
+
+                if (coloracionPielYMucRosada !== undefined) {
+                    newValoration.oxigenacion.circulacion.coloracionPielYMucRosada = coloracionPielYMucRosada;
+                }
+
+                if (coloracionPielYMucPalida !== undefined) {
+                    newValoration.oxigenacion.circulacion.coloracionPielYMucPalida = coloracionPielYMucPalida;
+                }
+
+                if (coloracionPielYMucCianosis !== undefined) {
+                    newValoration.oxigenacion.circulacion.coloracionPielYMucCianosis = coloracionPielYMucCianosis;
+                }
+
+                if (coloracionPielYMucLivideces !== undefined) {
+                    newValoration.oxigenacion.circulacion.coloracionPielYMucLivideces = coloracionPielYMucLivideces;
+                }
+
+                if (coloracionPielYMucIctericia !== undefined) {
+                    newValoration.oxigenacion.circulacion.coloracionPielYMucIctericia = coloracionPielYMucIctericia;
+                }
+
+                if (coloracionPielYMucOtra !== undefined) {
+                    newValoration.oxigenacion.circulacion.coloracionPielYMucOtra = coloracionPielYMucOtra;
+                }
+
+                if (temperaturaAxilar) {
+                    newValoration.oxigenacion.circulacion.temperaturaAxilar = temperaturaAxilar;
+                }
+
+                if (temperaturaRectal) {
+                    newValoration.oxigenacion.circulacion.temperaturaRectal = temperaturaRectal;
+                }
+
+                if (edemas) {
+                    newValoration.oxigenacion.circulacion.edemas = edemas;
+                }
+
+                //Datos de sensopercepcion
+                if (nivelConcienciaLucido !== undefined) {
+                    newValoration.sensopercepcion.nivelConcienciaLucido = nivelConcienciaLucido;
+                }
+                
+                if (nivelConcienciaConfuso !== undefined) {
+                    newValoration.sensopercepcion.nivelConcienciaConfuso = nivelConcienciaConfuso;
+                }
+                
+                if (nivelConcienciaDelirante !== undefined) {
+                    newValoration.sensopercepcion.nivelConcienciaDelirante = nivelConcienciaDelirante;
+                }
+                
+                if (nivelConcienciaEstuporoso !== undefined) {
+                    newValoration.sensopercepcion.nivelConcienciaEstuporoso = nivelConcienciaEstuporoso;
+                }
+                
+                if (nivelConcienciaComa !== undefined) {
+                    newValoration.sensopercepcion.nivelConcienciaComa = nivelConcienciaComa;
+                }
+                
+                if (aperturaOcular) {
+                    newValoration.sensopercepcion.aperturaOcular = aperturaOcular;
+                }
+                
+                if (respuestaMotora) {
+                    newValoration.sensopercepcion.respuestaMotora = respuestaMotora;
+                }
+                
+                if (respuestaVerbal) {
+                    newValoration.sensopercepcion.respuestaVerbal = respuestaVerbal;
+                }
+                
+                if (tamanioPupilas) {
+                    newValoration.sensopercepcion.tamanioPupilas = tamanioPupilas;
+                }
+                
+                if (simetriaPupilas) {
+                    newValoration.sensopercepcion.simetriaPupilas = simetriaPupilas;
+                }
+                
+                if (reactividad) {
+                    newValoration.sensopercepcion.reactividad = reactividad;
+                }
+                
+                if (babinsky) {
+                    newValoration.sensopercepcion.babinsky = babinsky;
+                }
+                
+                if (otrosPupilas) {
+                    newValoration.sensopercepcion.otrosPupilas = otrosPupilas;
+                }
+                
+                if (afasias) {
+                    newValoration.sensopercepcion.afasias = afasias;
+                }
+                
+                if (dolorSensopercepcion) {
+                    newValoration.sensopercepcion.dolorSensopercepcion = dolorSensopercepcion;
+                }
+                
+                if (caracteristicasDolor) {
+                    newValoration.sensopercepcion.caracteristicasDolor = caracteristicasDolor;
+                }
+                
+                if (localizacionDolor) {
+                    newValoration.sensopercepcion.localizacionDolor = localizacionDolor;
+                }
+
+                //Datos de nutrición
+                if (peso) {
+                    newValoration.nutricion.peso = peso;
+                }
+                
+                if (talla) {
+                    newValoration.nutricion.talla = talla;
+                }
+                
+                if (obesidad) {
+                    newValoration.nutricion.obesidad = obesidad;
+                }
+                
+                if (hidratacion) {
+                    newValoration.nutricion.hidratacion = hidratacion;
+                }
+                
+                if (signoPliegue) {
+                    newValoration.nutricion.signoPliegue = signoPliegue;
+                }
+                
+                if (autonomiaParaAlimentarse) {
+                    newValoration.nutricion.autonomiaParaAlimentarse = autonomiaParaAlimentarse;
+                }
+                
+                if (alimentacionEnteralOral !== undefined) {
+                    newValoration.nutricion.alimentacionEnteralOral = alimentacionEnteralOral;
+                }
+                
+                if (alimentacionEnteralSNG !== undefined) {
+                    newValoration.nutricion.alimentacionEnteralSNG = alimentacionEnteralSNG;
+                }
+                
+                if (ingresosViaOral) {
+                    newValoration.nutricion.ingresosViaOral = ingresosViaOral;
+                }
+                
+                if (ingresosViaParenteral) {
+                    newValoration.nutricion.ingresosViaParenteral = ingresosViaParenteral;
+                }
+
+                //Datos de Eliminacion 
+                if (ruidosHidroaereos) {
+                    newValoration.eliminacion.ruidosHidroaereos = ruidosHidroaereos;
+                }
+                
+                if (distencionAbdominal) {
+                    newValoration.eliminacion.distencionAbdominal = distencionAbdominal;
+                }
+                
+                if (colorDeposiciones) {
+                    newValoration.eliminacion.colorDeposiciones = colorDeposiciones;
+                }
+                
+                if (consistenciaDeposiciones) {
+                    newValoration.eliminacion.consistenciaDeposiciones = consistenciaDeposiciones;
+                }
+                
+                if (otrasCaracteristicasDeposiciones) {
+                    newValoration.eliminacion.otrasCaracteristicasDeposiciones = otrasCaracteristicasDeposiciones;
+                }
+                
+                if (sudoracion) {
+                    newValoration.eliminacion.sudoracion = sudoracion;
+                }
+                
+                if (totalEgresosSudoracion) {
+                    newValoration.eliminacion.totalEgresosSudoracion = totalEgresosSudoracion;
+                }
+                
+                if (perdidaInsensibleSudoracion) {
+                    newValoration.eliminacion.perdidaInsensibleSudoracion = perdidaInsensibleSudoracion;
+                }
+                
+                if (totalIngresosBalanceHidrico) {
+                    newValoration.eliminacion.totalIngresosBalanceHidrico = totalIngresosBalanceHidrico;
+                }
+                
+                if (totalEgresosBalanceHidrico) {
+                    newValoration.eliminacion.totalEgresosBalanceHidrico = totalEgresosBalanceHidrico;
+                }
+
+                //Datos de Aseo Y Piel
+                if (lesiones) {
+                    newValoration.aseoYPiel.lesiones = lesiones;
+                }
+                
+                if (localizacionLesiones) {
+                    newValoration.aseoYPiel.localizacionLesiones = localizacionLesiones;
+                }
+                
+                if (cicatrices) {
+                    newValoration.aseoYPiel.cicatrices = cicatrices;
+                }
+                
+                if (localizacionCicatrices) {
+                    newValoration.aseoYPiel.localizacionCicatrices = localizacionCicatrices;
+                }
+                
+                if (mudaDeRopa !== undefined) {
+                    newValoration.aseoYPiel.mudaDeRopa = mudaDeRopa;
+                }
+                
+                if (elementosDeHigiene !== undefined) {
+                    newValoration.aseoYPiel.elementosDeHigiene = elementosDeHigiene;
+                }
+                
+                if (higienePorSiMismo) {
+                    newValoration.aseoYPiel.higienePorSiMismo = higienePorSiMismo;
+                }
+
+                //Datos de Reposo y Suenio
+                if (posicionEnCama) {
+                    newValoration.reposoYSuenio.posicionEnCama = posicionEnCama;
+                }
+                
+                if (habitosDescansoNocturno) {
+                    newValoration.reposoYSuenio.habitosDescansoNocturno = habitosDescansoNocturno;
+                }
+                
+                if (horas) {
+                    newValoration.reposoYSuenio.horas = horas;
+                }
+                
+                if (alteracionSuenio) {
+                    newValoration.reposoYSuenio.alteracionSuenio = alteracionSuenio;
+                }
+                
+                if (sedantes) {
+                    newValoration.reposoYSuenio.sedantes = sedantes;
+                }
+
+                //Datos Psicosociales
+                if (estadoMiedo !== undefined) {
+                    newValoration.psicosocial.estadoMiedo = estadoMiedo;
+                }
+                
+                if (estadoNegativismo !== undefined) {
+                    newValoration.psicosocial.estadoNegativismo = estadoNegativismo;
+                }
+                
+                if (estadoInquietud !== undefined) {
+                    newValoration.psicosocial.estadoInquietud = estadoInquietud;
+                }
+                
+                if (estadoDepresion !== undefined) {
+                    newValoration.psicosocial.estadoDepresion = estadoDepresion;
+                }
+                
+                if (estadoApatia !== undefined) {
+                    newValoration.psicosocial.estadoApatia = estadoApatia;
+                }
+                
+                if (estadoAnsiedad !== undefined) {
+                    newValoration.psicosocial.estadoAnsiedad = estadoAnsiedad;
+                }
+                
+                if (estadoAgresividad !== undefined) {
+                    newValoration.psicosocial.estadoAgresividad = estadoAgresividad;
+                }
+                
+                if (estadoLlanto !== undefined) {
+                    newValoration.psicosocial.estadoLlanto = estadoLlanto;
+                }
+                
+                if (creenciasReligion) {
+                    newValoration.psicosocial.creenciasReligion = creenciasReligion;
+                }
+                
+                if (trabajaActualmente) {
+                    newValoration.psicosocial.trabajaActualmente = trabajaActualmente;
+                }
+                
+                if (ocupacion) {
+                    newValoration.psicosocial.ocupacion = ocupacion;
+                }
+                
+                if (desdeCuandoTrabaja) {
+                    newValoration.psicosocial.desdeCuandoTrabaja = desdeCuandoTrabaja;
+                }
+                
+                if (sentimientoEnTrabajo) {
+                    newValoration.psicosocial.sentimientoEnTrabajo = sentimientoEnTrabajo;
+                }
+                
+                if (escolaridad) {
+                    newValoration.psicosocial.escolaridad = escolaridad;
+                }
+                
+                if (aprendizajeDeseaAprender !== undefined) {
+                    newValoration.psicosocial.aprendizajeDeseaAprender = aprendizajeDeseaAprender;
+                }
+                
+                if (aprendizajeNegacionAlTratamiento !== undefined) {
+                    newValoration.psicosocial.aprendizajeNegacionAlTratamiento = aprendizajeNegacionAlTratamiento;
+                }
+                
+                if (aprendizajeAceptacionAlTratamiento !== undefined) {
+                    newValoration.psicosocial.aprendizajeAceptacionAlTratamiento = aprendizajeAceptacionAlTratamiento;
+                }
+
+                //Datos de Riesgo
+                if (tabaquismo) {
+                    newValoration.riesgo.tabaquismo = tabaquismo;
+                }
+                
+                if (tabaquismoCuantos) {
+                    newValoration.riesgo.tabaquismoCuantos = tabaquismoCuantos;
+                }
+                
+                if (consumoAlcohol) {
+                    newValoration.riesgo.consumoAlcohol = consumoAlcohol;
+                }
+                
+                if (enfermedadesPreexistentes) {
+                    newValoration.riesgo.enfermedadesPreexistentes = enfermedadesPreexistentes;
+                }
+                
+                if (motivoFallecimientoPadres) {
+                    newValoration.riesgo.motivoFallecimientoPadres = motivoFallecimientoPadres;
+                }
+                
+                if (motivoFallecimientoHermanos) {
+                    newValoration.riesgo.motivoFallecimientoHermanos = motivoFallecimientoHermanos;
+                }
+                
+                if (motivoFallecimientoAbuelos) {
+                    newValoration.riesgo.motivoFallecimientoAbuelos = motivoFallecimientoAbuelos;
+                }
+
+                newValoration.apellidoCargador = req.user.profesional.apellido;
+                newValoration.nombreCargador = req.user.profesional.nombre;
+                newValoration.matriculaCargador = req.user.profesional.matriculaProfesional;         
+                            
             console.log('SE AGREGO VALORACION: ', newValoration);
             await newValoration.save();
             
